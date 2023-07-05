@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:app/app/themes/colors.dart';
 
 class PrimaryButton extends StatefulWidget {
   final String title;
@@ -12,7 +10,7 @@ class PrimaryButton extends StatefulWidget {
   const PrimaryButton(
       {Key? key,
       required this.title,
-      this.color = const Color(0xFFA63333),
+      this.color = SetColors.primaryRedColor,
       this.textColor = Colors.white,
       required this.onPressed,
       this.borderRadius})

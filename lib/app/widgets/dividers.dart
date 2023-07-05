@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
-
+import 'package:app/app/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class MainDivider extends StatefulWidget {
@@ -20,7 +20,7 @@ class _MainDividerState extends State<MainDivider> {
             child: Container(
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Color(0xFFA63333), Colors.transparent],
+                      colors: [SetColors.primaryRedColor, Colors.transparent],
                       begin: Alignment.centerRight,
                       end: Alignment.centerLeft)),
             ),
@@ -38,7 +38,7 @@ class _MainDividerState extends State<MainDivider> {
             child: Container(
               decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Color(0xFFA63333), Colors.transparent],
+                      colors: [SetColors.primaryRedColor, Colors.transparent],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight)),
             ),

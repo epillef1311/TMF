@@ -1,7 +1,8 @@
 import 'package:app/app/widgets/button.dart';
 import 'package:app/app/widgets/dividers.dart';
-import 'package:app/app/widgets/textFormFields.dart';
+import 'package:app/app/widgets/text_form_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:app/app/themes/colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,20 +15,19 @@ class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController _name;
   late final TextEditingController _email;
   late final TextEditingController _password;
-  late final TextEditingController _telefone;
+
   @override
   void initState() {
     _name = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
-    _telefone = TextEditingController();
     super.initState();
   }
 
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xFFFFF9EA),
+      backgroundColor: SetColors.backGroundColor,
       body: SingleChildScrollView(
         child: SizedBox(
           height: size.height,
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Expanded(
                     child: Image.asset(
-                      'assets/images/redDices.jpg',
+                      'assets/images/fichasDeRPG.jpg',
                     ),
                   )
                 ],
@@ -51,16 +51,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   horizontal: 80,
                   vertical: 30,
                 ),
-                decoration: const BoxDecoration(color: Color(0xFFFFF9EA)),
+                decoration:
+                    const BoxDecoration(color: SetColors.backGroundColor),
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10, left: 5),
                     child: Row(
-                      children: [
-                        const Text(
+                      children: const [
+                        Text(
                           'Login',
-                          style:
-                              TextStyle(color: Color(0xFFA63333), fontSize: 24),
+                          style: TextStyle(
+                              color: SetColors.primaryRedColor, fontSize: 24),
                         ),
                       ],
                     ),
@@ -113,7 +114,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: SizedBox(
                         height: 45,
-                        child: PrimaryButton(title: 'Login', onPressed: () {})),
+                        child: PrimaryButton(
+                            title: 'Login',
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/home');
+                            })),
                   ),
                   //Divisor
                   const Padding(

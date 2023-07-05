@@ -1,6 +1,7 @@
+import 'package:app/src/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'src/screens/auth/loginScreen.dart';
+import 'src/screens/auth/login_screen.dart';
 
 void main() {
   runApp(const TormentaFichaApp());
@@ -9,7 +10,6 @@ void main() {
 class TormentaFichaApp extends StatelessWidget {
   const TormentaFichaApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +20,7 @@ class TormentaFichaApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen()
       },
     );
   }
