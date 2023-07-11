@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:app/app/themes/colors.dart';
 
 class OutlinedTextFormField extends StatefulWidget {
   final TextEditingController controller;
@@ -34,7 +35,7 @@ class _OutlinedTextFormFieldState extends State<OutlinedTextFormField> {
       height: 60,
       width: 330,
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Color(0xFFA63333)),
+        border: Border.all(width: 1, color: SetColors.primaryRedColor),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Align(

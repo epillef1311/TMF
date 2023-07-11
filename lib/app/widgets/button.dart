@@ -34,7 +34,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
       onPressed: widget.onPressed,
       style: TextButton.styleFrom(
           minimumSize: const Size.fromWidth(330),
-          fixedSize: Size(330, 60),
+          fixedSize: const Size(330, 60),
           padding: const EdgeInsets.all(6),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           backgroundColor: widget.color),

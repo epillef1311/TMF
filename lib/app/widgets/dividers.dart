@@ -27,7 +27,7 @@ class _MainDividerState extends State<MainDivider> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
+          padding: EdgeInsets.symmetric(horizontal: 2),
           child: Row(
             children: [Text('Ou')],
           ),

@@ -1,9 +1,13 @@
 import 'package:app/src/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'database/db.dart';
 import 'src/screens/auth/login_screen.dart';
+import 'src/screens/lista_fichas/lista_fichas_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DB.instance.database;
   runApp(const TormentaFichaApp());
 }
 
@@ -20,7 +24,8 @@ class TormentaFichaApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LoginScreen(),
-        '/home': (context) => const HomeScreen()
+        '/home': (context) => const HomeScreen(),
+        'listaFichas': (context) => const ListaFichas()
       },
     );
   }

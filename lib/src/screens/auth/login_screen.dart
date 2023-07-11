@@ -12,18 +12,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late final TextEditingController _name;
+  //late final TextEditingController _name;
   late final TextEditingController _email;
   late final TextEditingController _password;
 
   @override
   void initState() {
-    _name = TextEditingController();
+    // _name = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -55,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const BoxDecoration(color: SetColors.backGroundColor),
                 child: Column(children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10, left: 5),
+                    padding: EdgeInsets.only(bottom: 10, left: 5),
                     child: Row(
                       children: const [
                         Text(

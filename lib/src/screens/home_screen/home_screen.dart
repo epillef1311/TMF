@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:app/app/themes/colors.dart';
 import 'package:app/app/widgets/button.dart';
-import 'package:app/app/themes/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 45,
                 child: PrimaryButton(
                   title: 'Fichas',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('listaFichas');
+                  },
                 ),
               ),
             ),
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: SizedBox(
                 height: 45,
                 child: PrimaryButton(
@@ -62,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: SizedBox(
                 height: 45,
                 child: PrimaryButton(
