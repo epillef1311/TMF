@@ -1,51 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:app/database/db.dart';
 import 'package:app/app/themes/colors.dart';
 
 class AlertDialogFicha extends StatefulWidget {
-  const AlertDialogFicha({super.key});
+  final Function()? onDialogClosed;
+
+  const AlertDialogFicha({Key? key, this.onDialogClosed}) : super(key: key);
 
   @override
   State<AlertDialogFicha> createState() => _AlertDialogFichaState();
 }
 
 class _AlertDialogFichaState extends State<AlertDialogFicha> {
+  final nomeController = TextEditingController();
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: SetColors.primaryRedColor,
       onPressed: () {
         showDialog(
-            context: context,
-            builder: (context) {
-              var nomeControler = TextEditingController();
-              return AlertDialog(
-                title: Text('Qual o nome do personagem?'),
-                content: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        autofocus: true,
-                        decoration: InputDecoration(hintText: 'Nome'),
-                        controller: nomeControler,
-                      )
-                    ],
-                  ),
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Qual o nome do personagem?'),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      autofocus: true,
+                      decoration: const InputDecoration(hintText: 'Nome'),
+                      controller: nomeController,
+                    ),
+                  ],
                 ),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        DB.instance.inserirNome(nomeControler.text);
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('pronto')),
-                ],
-              );
-            });
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await DB.instance.inserirNome(nomeController.text);
+                    Navigator.of(context).pop();
+                    nomeController.text = '';
+                  },
+                  child: const Text('Pronto'),
+                ),
+              ],
+            );
+          },
+        ).then((value) {
+          // Executar ação quando o AlertDialog for fechado
+          if (widget.onDialogClosed != null) {
+            widget.onDialogClosed!();
+          }
+        });
       },
-      child: Icon(
+      child: const Icon(
         Icons.add,
         color: Colors.white,
       ),

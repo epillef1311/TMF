@@ -3,6 +3,7 @@ import 'package:app/app/themes/colors.dart';
 import 'package:app/app/widgets/alert_dialog.dart';
 import 'package:app/database/db.dart';
 import 'package:app/app/widgets/button.dart';
+import 'package:app/database/models/ficha.dart';
 
 class ListaFichas extends StatefulWidget {
   const ListaFichas({Key? key}) : super(key: key);
@@ -12,16 +13,21 @@ class ListaFichas extends StatefulWidget {
 }
 
 class _ListaFichasState extends State<ListaFichas> {
-  Future<List<String>> _getNomes() async {
-    final database = await DB.instance.database;
-    final List<Map<String, dynamic>> nomeList = await database.query('fichas');
-    return nomeList.map((nome) => nome['nomePersonagem'] as String).toList();
+  List<Ficha> fichas = [];
+
+  reloadScreen() async {
+    final data = await DB.instance.getAllNomes();
+    setState(() {
+      fichas = data;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: AlertDialogFicha(),
+      floatingActionButton: AlertDialogFicha(
+        onDialogClosed: reloadScreen,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       backgroundColor: SetColors.backGroundColor,
       appBar: AppBar(
@@ -34,21 +40,26 @@ class _ListaFichasState extends State<ListaFichas> {
         backgroundColor: SetColors.primaryRedColor,
         automaticallyImplyLeading: false,
       ),
-      body: FutureBuilder<List<String>>(
-        future: _getNomes(),
+      body: FutureBuilder<List<Ficha>>(
+        future: DB.instance.getAllNomes(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final nomes = snapshot.data!;
+            final fichas = snapshot.data!;
             return ListView.builder(
-              itemCount: nomes.length,
+              itemCount: fichas.length,
               itemBuilder: (context, index) {
-                final nome = nomes[index];
+                final ficha = fichas[index];
                 return Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
                   child: SizedBox(
                     height: 45,
-                    child: PrimaryButton(
-                      title: nome,
+                    child: FichaCardButton(
+                      title: ficha.nome,
+                      id: ficha.id,
+                      deleteFunc: () {
+                        DB.instance.deletarFicha(ficha.id, ficha.id);
+                        reloadScreen();
+                      },
                       onPressed: () {},
                     ),
                   ),
