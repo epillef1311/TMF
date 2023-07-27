@@ -1,3 +1,5 @@
+import 'package:app/app/widgets/botton_nav_bar.dart';
+import 'package:app/src/screens/fichaPersonagem/ficha_personagem.dart';
 import 'package:app/src/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +27,9 @@ class TormentaFichaApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
-        'listaFichas': (context) => const ListaFichas()
+        'listaFichas': (context) => const ListaFichas(),
+        'fichaPersonagem': (context) => const FichaPersonagem(),
+        'bottonNavBar': (context) => const BottonNavBar()
       },
     );
   }

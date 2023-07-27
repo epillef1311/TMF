@@ -117,33 +117,33 @@ class DB {
       CREATE TABLE pericias (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome_pericia TEXT,
-        somente_treinado TEXT,
-        penalidade_armadura TEXT,
-        )
+        somente_treinado INTEGER,
+        penalidade_armadura INTEGER
+        );
       
       INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura)
       VALUES
-      ( Adestrar Animais, s, n),
-      ( Acrobacia, n, s),
-      ( Atletismo, n, s),
-      ( Atuação, n, n),
-      ( Cavalgar, n, n),
-      ( Conhecimento, s, n),
-      ( Cura, n, n),
-      ( Diplomacia, n, n),
-      ( Enganação, n, n),
-      ( Furtividade, n, s),
-      ( Identificar Magia, s, n),
-      ( Iniciativa, n, n),
-      ( Intimidação, n, n),
-      ( Intuição, n, n),
-      ( Jogatina, n, n),
-      ( Ladinagem, s, s),
-      ( Meditação, n, n),
-      ( Obter Informação, n, n),
-      ( Ofício, n, n),
-      ( Percepção, n, n),
-      ( Sobrevivência, n, n)
+      ( 'Adestrar_Animais', 1, 0),
+      ( 'Acrobacia', 0, 1),
+      ( 'Atletismo', 0, 1),
+      ( 'Atuação', 0, 0),
+      ( 'Cavalgar', 0, 0),
+      ( 'Conhecimento', 1, 0),
+      ( 'Cura', 0, 0),
+      ( 'Diplomacia', 0, 0),
+      ( 'Enganação', 0, 0),
+      ( 'Furtividade', 0, 1),
+      ( 'Identificar Magia', 1, 0),
+      ( 'Iniciativa', 0, 0),
+      ( 'Intimidação', 0, 0),
+      ( 'Intuição', 0, 0),
+      ( 'Jogatina', 0, 0),
+      ( 'Ladinagem', 1, 1),
+      ( 'Meditação', 0, 0),
+      ( 'Obter_Informação', 0, 0),
+      ( 'Ofício', 0, 0),
+      ( 'Percepção', 0, 0),
+      ( 'Sobrevivência', 0, 0)
     ''';
 
   String get _tabelaPericiasFicha => '''
@@ -180,7 +180,7 @@ class DB {
 
   String get _tabelaMagias => '''
     CREATE TABLE magias(
-      id PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome_magia TEXT,
       alvo_area TEXT,
       tempo_execucao TEXT,
@@ -225,7 +225,7 @@ class DB {
 ''';
 
   String get _tabelaClasseFicha => '''
-    CREATE TABLE magia_fica(
+    CREATE TABLE classe_ficha(
       id_ficha INTEGER,
       id_classe INTEGER,
       FOREIGN KEY(id_ficha) REFERENCES fichas(id),
@@ -250,7 +250,7 @@ class DB {
       id_ficha INTEGER,
       id_ataque INTEGER,
       FOREIGN KEY(id_ficha) REFERENCES fichas(id),
-      FOREIGN KEY(id_ataques) REFERENCES ataques(id)
+      FOREIGN KEY(id_ataque) REFERENCES ataques(id)
     )
 ''';
 
@@ -288,10 +288,8 @@ class DB {
     );
   }
 
-  Future<void> deletarFicha(int id, tabelaTalentos) async {
+  Future<void> deletarFicha(int id) async {
     final database = await DB.instance.database;
-    final fichaNome = tabelaTalentos;
-    await database.delete(fichaNome);
     await database.delete(
       'fichas',
       where: 'id = ?',

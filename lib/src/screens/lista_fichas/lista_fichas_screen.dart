@@ -57,11 +57,12 @@ class _ListaFichasState extends State<ListaFichas> {
                       title: ficha.nome,
                       id: ficha.id,
                       deleteFunc: () {
-                        DB.instance
-                            .deletarFicha(ficha.id, ficha.tabelaTalentos);
+                        DB.instance.deletarFicha(ficha.id);
                         reloadScreen();
                       },
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('bottonNavBar');
+                      },
                     ),
                   ),
                 );

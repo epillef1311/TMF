@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           InkWell(
                               onTap: () {},
                               child: const Text(
-                                'Esqueceu a senha ?',
+                                'Esqueceu a senha?',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 12,
