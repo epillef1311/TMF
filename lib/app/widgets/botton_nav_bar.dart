@@ -1,9 +1,11 @@
 import 'package:app/app/themes/colors.dart';
-import 'package:app/src/screens/auth/login_screen.dart';
+import 'package:app/src/screens/PericiasScreen/pericias_screen.dart';
+import 'package:app/src/screens/combateScreen/combate_screen.dart';
 import 'package:app/src/screens/fichaPersonagem/ficha_personagem.dart';
+import 'package:app/src/screens/inventarioScreen/inventario_screen.dart';
+import 'package:app/src/screens/magiasScreen/magias_screen.dart';
+import 'package:app/src/screens/talentosHabilidades/talentos_habilidades_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class BottonNavBar extends StatefulWidget {
   const BottonNavBar({super.key});
@@ -32,8 +34,15 @@ class _BottonNavBarState extends State<BottonNavBar> {
     return Scaffold(
       body: PageView(
         controller: pc,
-        children: const [FichaPersonagem(), LoginScreen()],
         onPageChanged: setScreenAtual,
+        children: const [
+          FichaPersonagem(),
+          FichaPericias(),
+          FichaHabilidadesTalentos(),
+          FichaCombate(),
+          FichaMagias(),
+          FichaInventario()
+        ],
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
@@ -41,14 +50,27 @@ class _BottonNavBarState extends State<BottonNavBar> {
         child: BottomNavigationBar(
           currentIndex: screenAtual,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.house), label: 'perfil'),
-            BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'login')
+            BottomNavigationBarItem(
+                icon: Icon(Icons.house),
+                label: 'Status',
+                backgroundColor: SetColors.primaryRedColor),
+            BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'Pericias'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.abc_sharp), label: 'Habilidades'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.kitchen), label: 'Combate'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.fire_extinguisher), label: 'Magias'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.money),
+              label: 'Inventário',
+            )
           ],
           onTap: (screen) {
             pc.animateToPage(screen,
-                duration: Duration(milliseconds: 400), curve: Curves.ease);
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.ease);
           },
-          backgroundColor: SetColors.primaryRedColor,
         ),
       ),
     );
