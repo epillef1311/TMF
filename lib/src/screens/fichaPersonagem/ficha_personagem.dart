@@ -1,7 +1,5 @@
 import 'package:app/app/themes/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class FichaPersonagem extends StatefulWidget {
   const FichaPersonagem({super.key});

@@ -57,7 +57,10 @@ class DB {
     deslocamento TEXT,
     divindade TEXT,
     bio TEXT,
-    imagem TEXT
+    imagem TEXT,
+    mana_total INTEGER,
+    mana_atual INTEGER,
+    energia INTEGER
   )
   ''';
 
@@ -75,7 +78,7 @@ class DB {
     mod_temp_CON INTEGER,
     mod_temp_INT INTEGER,
     mod_temp_SAB INTEGER,
-    mod_temp_CAR INTEGER
+    mod_temp_CAR INTEGER,
     mod_temp_FORT TEXT,
     mod_temp_REF TEXT,
     mod_temp_VON TEXT,
@@ -205,22 +208,10 @@ class DB {
   String get _tabelaClasses => '''
     CREATE TABLE classes(
       id INTEGER PRIMARY KEY,
-      classe_1 TEXT,
-      classe_2 TEXT,
-      classe_3 TEXT,
-      classe_4 TEXT,
-      pv_classe_1 INTEGER,
-      pv_classe_2 INTEGER,
-      pv_classe_3 INTEGER,
-      pv_classe_4 INTEGER,
-      bba_classe_1 INTEGER,
-      bba_classe_2 INTEGER,
-      bba_classe_3 INTEGER,
-      bba_classe_4 INTEGER,
-      pv_temp INTEGER,
-      mana_total INTEGER,
-      mana_atual INTEGER,
-      energia INTEGER
+      nome_classe TEXT,
+      pv_classe INTEGER,
+      bba_classe INTEGER,
+      pv_temp INTEGER
     )
 ''';
 
