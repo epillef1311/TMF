@@ -60,7 +60,8 @@ class DB {
     imagem TEXT,
     mana_total INTEGER,
     mana_atual INTEGER,
-    energia INTEGER
+    energia INTEGER,
+    raca TEXT
   )
   ''';
 
@@ -288,4 +289,16 @@ class DB {
             id: nome['id'] as int, nome: nome['nome_personagem'] as String))
         .toList();
   }
+}
+
+Future<void> updateFicha(
+    String tabela, String column, dynamic value, int id) async {
+  final database = await DB.instance.database;
+
+  await database.update(
+    tabela,
+    {column: value},
+    where: 'id = ?',
+    whereArgs: [id],
+  );
 }

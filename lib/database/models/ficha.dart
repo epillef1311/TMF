@@ -20,6 +20,7 @@ class Ficha {
   int? manaTotal;
   int? manaAtual;
   int? energia;
+  String? raca;
 
   Ficha({
     required this.id,
@@ -55,17 +56,7 @@ class Ficha {
     manaTotal = map['mana_total'];
     manaAtual = map['mana_atual'];
     energia = map['energia'];
+    raca = map['raca'];
     return null;
-  }
-
-  Future<void> updateFicha(String column, dynamic value, int id) async {
-    final database = await DB.instance.database;
-
-    await database.update(
-      'fichas',
-      {column: value},
-      where: 'id = ?',
-      whereArgs: [id],
-    );
   }
 }

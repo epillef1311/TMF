@@ -61,8 +61,12 @@ class _ListaFichasState extends State<ListaFichas> {
                         reloadScreen();
                       },
                       onPressed: () {
+                        ficha.loadFicha(ficha.id);
                         Navigator.of(context)
-                            .pushNamed('bottonNavBar', arguments: ficha);
+                            .pushNamed('bottonNavBar', arguments: ficha)
+                            .then((_) {
+                          setState(() {});
+                        });
                       },
                     ),
                   ),

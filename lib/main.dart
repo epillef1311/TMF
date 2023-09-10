@@ -1,5 +1,4 @@
 import 'package:app/app/widgets/botton_nav_bar.dart';
-import 'package:app/src/screens/fichaPersonagem/ficha_personagem.dart';
 import 'package:app/src/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
