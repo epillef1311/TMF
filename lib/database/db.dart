@@ -271,14 +271,6 @@ class DB {
     });
   }
 
-  Future<void> inserirCaracteristica(String nome, String caracteristica) async {
-    final database = await instance.database;
-    await database.insert(
-      nome,
-      {'caracteristica': caracteristica},
-    );
-  }
-
   Future<void> deletarFicha(int id) async {
     final database = await DB.instance.database;
     await database.delete(

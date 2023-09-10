@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:app/app/themes/colors.dart';
-import 'package:app/database/db.dart';
 
 class PrimaryButton extends StatefulWidget {
   final String title;

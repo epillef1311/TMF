@@ -1,4 +1,5 @@
 import 'package:app/app/themes/colors.dart';
+import 'package:app/database/models/ficha.dart';
 import 'package:app/src/screens/PericiasScreen/pericias_screen.dart';
 import 'package:app/src/screens/combateScreen/combate_screen.dart';
 import 'package:app/src/screens/fichaPersonagem/ficha_personagem.dart';
@@ -31,12 +32,16 @@ class _BottonNavBarState extends State<BottonNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    final ficha = ModalRoute.of(context)!.settings.arguments as Ficha;
+    ficha.loadFicha(ficha.id);
     return Scaffold(
       body: PageView(
         controller: pc,
         onPageChanged: setScreenAtual,
-        children: const [
-          FichaPersonagem(),
+        children: [
+          FichaPersonagem(
+            ficha: ficha,
+          ),
           FichaPericias(),
           FichaHabilidadesTalentos(),
           FichaCombate(),

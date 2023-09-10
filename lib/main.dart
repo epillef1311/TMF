@@ -28,7 +28,6 @@ class TormentaFichaApp extends StatelessWidget {
         '/': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         'listaFichas': (context) => const ListaFichas(),
-        'fichaPersonagem': (context) => const FichaPersonagem(),
         'bottonNavBar': (context) => const BottonNavBar()
       },
     );
