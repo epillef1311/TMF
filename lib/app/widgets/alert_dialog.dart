@@ -44,7 +44,9 @@ class _AlertDialogFichaState extends State<AlertDialogFicha> {
               actions: [
                 TextButton(
                   onPressed: () async {
-                    await DB.instance.inserirNome(nomeController.text);
+                    int id;
+                    id = await DB.instance.inserirNome(nomeController.text);
+                    createNewClass(id);
                     Navigator.of(context).pop();
                     nomeController.text = '';
                   },

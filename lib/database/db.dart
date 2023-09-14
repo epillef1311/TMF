@@ -212,7 +212,8 @@ class DB {
       nome_classe TEXT,
       pv_classe INTEGER,
       bba_classe INTEGER,
-      pv_temp INTEGER
+      pv_temp INTEGER,
+      nivel INTEGER
     )
 ''';
 
@@ -262,14 +263,16 @@ class DB {
     return -1;
   }
 
-  Future<void> inserirNome(String nome) async {
+  Future inserirNome(String nome) async {
     final database = await instance.database;
+    int idInserido = -1;
     await database.transaction((txn) async {
-      await txn.insert(
+      idInserido = await txn.insert(
         'fichas',
         {'nome_personagem': nome},
       );
     });
+    return idInserido;
   }
 
   Future<void> deletarFicha(int id) async {
@@ -301,4 +304,26 @@ Future<void> updateFicha(
     where: 'id = ?',
     whereArgs: [id],
   );
+}
+
+Future<void> createNewClass(int id) async {
+  final database = await DB.instance.database;
+  int idClasse = -1;
+  await database.transaction((txn) async {
+    idClasse = await txn.insert('classes', {'nome_classe': ''});
+  });
+  await database.transaction((txn) async {
+    await txn.insert('classe_ficha', {'id_classe': idClasse, 'id_ficha': id});
+  });
+}
+
+Future<void> deleteClass(int classId, int fichaId) async {
+  final database = await DB.instance.database;
+  await database.transaction((txn) async {
+    await txn.delete('classes', where: 'id = ?', whereArgs: [classId]);
+  });
+  await database.transaction((txn) async {
+    await txn.delete('classe_ficha',
+        where: 'id_classe = ? AND id_ficha = ?', whereArgs: [classId, fichaId]);
+  });
 }

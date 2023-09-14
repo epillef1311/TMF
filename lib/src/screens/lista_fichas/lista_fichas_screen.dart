@@ -60,8 +60,9 @@ class _ListaFichasState extends State<ListaFichas> {
                         DB.instance.deletarFicha(ficha.id);
                         reloadScreen();
                       },
-                      onPressed: () {
-                        ficha.loadFicha(ficha.id);
+                      onPressed: () async {
+                        await ficha.loadFicha(ficha.id);
+
                         Navigator.of(context)
                             .pushNamed('bottonNavBar', arguments: ficha)
                             .then((_) {

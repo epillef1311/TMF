@@ -42,7 +42,9 @@ class _BottonNavBarState extends State<BottonNavBar> {
           FichaPersonagem(
             ficha: ficha,
           ),
-          FichaPericias(),
+          FichaPericias(
+            ficha: ficha,
+          ),
           FichaHabilidadesTalentos(),
           FichaCombate(),
           FichaMagias(),
