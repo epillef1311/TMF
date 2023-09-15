@@ -306,7 +306,7 @@ Future<void> updateFicha(
   );
 }
 
-Future<void> createNewClass(int id) async {
+Future createNewClass(int id) async {
   final database = await DB.instance.database;
   int idClasse = -1;
   await database.transaction((txn) async {
@@ -315,6 +315,7 @@ Future<void> createNewClass(int id) async {
   await database.transaction((txn) async {
     await txn.insert('classe_ficha', {'id_classe': idClasse, 'id_ficha': id});
   });
+  return idClasse;
 }
 
 Future<void> deleteClass(int classId, int fichaId) async {

@@ -1,24 +1,26 @@
 import 'package:app/app/themes/colors.dart';
 import 'package:app/app/widgets/fichaWidget/Text_field.dart';
 import 'package:app/database/db.dart';
+import 'package:app/database/models/classe.dart';
 import 'package:app/database/models/ficha.dart';
 import 'package:flutter/material.dart';
 
 class FichaPersonagem extends StatefulWidget {
   final Ficha ficha;
+  int totalValue = 0;
 
-  const FichaPersonagem({Key? key, required this.ficha}) : super(key: key);
+  FichaPersonagem({Key? key, required this.ficha}) : super(key: key);
 
   @override
   State<FichaPersonagem> createState() => _FichaPersonagemState();
 }
 
 class _FichaPersonagemState extends State<FichaPersonagem> {
+  TextEditingController valorTotal = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final ficha = ModalRoute.of(context)!.settings.arguments as Ficha;
-    int teste = ficha.getTotalLevel;
-    print(teste);
     print('rebuild');
     return Scaffold(
         backgroundColor: SetColors.backGroundColor,
@@ -197,7 +199,6 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                                     onChanged: (value) {
                                       ficha.classes[index].setNivel(value);
                                       ficha.sumClassLevel(ficha.classes);
-                                      print(ficha.getTotalLevel);
                                       setState(() {});
                                     },
                                   ),
@@ -220,6 +221,7 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                                     onChanged: (value) {
                                       ficha.classes[index].setBba(value);
                                       ficha.sumClassBba(ficha.classes);
+                                      setState(() {});
                                     },
                                   ),
                                   SquareBox(
@@ -230,12 +232,54 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                                     onChanged: (value) {
                                       ficha.classes[index].setPv(value);
                                       ficha.sumClassPv(ficha.classes);
+                                      setState(() {});
                                     },
                                   ),
                                 ],
                               ),
                             );
                           }),
+                      // TOTAL------------------------------------------------------
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SquareBox(
+                              nomeColuna: 'nivel',
+                              id: ficha.classes[0].getIdClasse,
+                              initialValue: ficha.getTotalLevel,
+                              tableName: 'classes',
+                              enabled: false,
+                            ),
+                            RectangleBox(
+                              width: 172,
+                              nomeColuna: 'nome_classe',
+                              id: ficha.classes[0].getIdClasse,
+                              initialValue: null,
+                              tableName: 'classes',
+                              hintText: 'Total',
+                              onChanged: (value) {},
+                              enabled: false,
+                            ),
+                            SquareBox(
+                              nomeColuna: 'bba_classe',
+                              id: ficha.classes[0].getIdClasse,
+                              initialValue: ficha.getTotalBba,
+                              tableName: 'classes',
+                              enabled: false,
+                            ),
+                            SquareBox(
+                              nomeColuna: 'pv_classe',
+                              id: ficha.classes[0].getIdClasse,
+                              initialValue: ficha.getTotalPv,
+                              tableName: 'classes',
+                              enabled: false,
+                            ),
+                          ],
+                        ),
+                      ),
+                      // CREATE NEW CLASSE--------------------------------------
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Visibility(
@@ -243,8 +287,10 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           child: FloatingActionButton(
                             onPressed: () async {
                               if (ficha.classes.length < 4) {
-                                await createNewClass(ficha.id);
-                                await ficha.buscarClassesPorIdFicha(ficha.id);
+                                int idClasse = await createNewClass(ficha.id);
+                                Classe newClasse = Classe(idClasse: idClasse);
+                                ficha.classes.add(newClasse);
+                                ficha.sumAll(ficha.classes);
                                 setState(() {});
                               }
                             },
@@ -256,49 +302,23 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
+                    // ATRIBUTOS------------------------------------------------
                   ),
-                  // TOTAL------------------------------------------------------
                   Padding(
-                    padding: const EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.only(top: 8),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SquareBox(
-                          nomeColuna: 'nivel',
-                          id: ficha.classes[0].getIdClasse,
-                          initialValue: teste,
-                          tableName: 'classes',
-                          enabled: false,
-                          onChanged: (value) {
-                            print('changed');
-                          },
-                        ),
                         RectangleBox(
-                          width: 172,
-                          nomeColuna: 'nome_classe',
-                          id: ficha.classes[0].getIdClasse,
-                          initialValue: null,
-                          tableName: 'classes',
-                          hintText: 'Total',
-                          onChanged: (value) {},
+                          width: 68,
+                          nomeColuna: '',
+                          id: -1,
+                          initialValue: '',
+                          tableName: '',
+                          hintText: 'FOR',
                           enabled: false,
-                        ),
-                        SquareBox(
-                          nomeColuna: 'bba_classe',
-                          id: ficha.classes[0].getIdClasse,
-                          initialValue: ficha.getTotalBba,
-                          tableName: 'classes',
-                          enabled: false,
-                        ),
-                        SquareBox(
-                          nomeColuna: 'pv_classe',
-                          id: ficha.classes[0].getIdClasse,
-                          initialValue: ficha.getTotalPv,
-                          tableName: 'classes',
-                          enabled: false,
-                        ),
+                        )
                       ],
                     ),
                   )

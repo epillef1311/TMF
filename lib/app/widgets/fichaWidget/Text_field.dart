@@ -11,6 +11,7 @@ class SquareBox extends StatefulWidget {
   final String tableName;
   final void Function(String)? onChanged;
   bool enabled;
+
   SquareBox({
     required this.nomeColuna,
     required this.id,
@@ -30,6 +31,10 @@ class SquareBox extends StatefulWidget {
 class _SquareBoxState extends State<SquareBox> {
   late TextEditingController _controller;
   FocusNode _focusNode = FocusNode();
+
+  redrawWidget() {
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -65,32 +70,58 @@ class _SquareBoxState extends State<SquareBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 2, color: SetColors.primaryRedColor),
-        color: SetColors.backGroundColor,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 1,
-            offset: Offset(0, 1),
-          )
-        ],
-      ),
-      child: TextField(
-        keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        style: TextStyle(fontSize: 20),
-        textAlign: TextAlign.center,
-        controller: _controller,
-        focusNode: _focusNode,
-        onChanged: widget.onChanged,
-        enabled: widget.enabled,
-      ),
-    );
+    if (widget.enabled == true) {
+      return Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 2, color: SetColors.primaryRedColor),
+          color: SetColors.backGroundColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 1,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
+        child: TextField(
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+          controller: _controller,
+          focusNode: _focusNode,
+          onChanged: widget.onChanged,
+          enabled: widget.enabled,
+        ),
+      );
+    } else {
+      int? valor = widget.initialValue;
+      return Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 2, color: SetColors.primaryRedColor),
+          color: SetColors.backGroundColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 1,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          '$valor',
+          style: const TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
   }
 }
 

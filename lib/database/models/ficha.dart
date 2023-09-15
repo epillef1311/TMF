@@ -221,15 +221,17 @@ class Ficha {
 
   loadClasses(List<Map<String, dynamic>> listaClasses) {
     classes = [];
+    idClasses = [];
     for (final classe in listaClasses) {
       final idClasse = classe['id_classe'];
       final classeFicha = Classe(idClasse: idClasse);
 
       classeFicha.loadClasse(idClasse);
       if (idClasses.contains(classeFicha.idClasse)) {
-        idClasses.add(classeFicha.idClasse);
+        //idClasses.add(classeFicha.idClasse);
         continue;
       } else {
+        idClasses.add(classeFicha.idClasse);
         classes.add(classeFicha);
       }
     }
@@ -271,5 +273,11 @@ class Ficha {
       }
     }
     _totalPv = totalPv;
+  }
+
+  void sumAll(List<Classe> classes) {
+    sumClassBba(classes);
+    sumClassLevel(classes);
+    sumClassPv(classes);
   }
 }
