@@ -26,8 +26,8 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
         backgroundColor: SetColors.backGroundColor,
         appBar: AppBar(
           title: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: const [Text('ficha')],
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [Text('Atributos')],
           ),
           automaticallyImplyLeading: false,
           backgroundColor: SetColors.primaryRedColor,
@@ -282,33 +282,79 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                       // CREATE NEW CLASSE--------------------------------------
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
-                        child: Visibility(
-                          visible: ficha.classes.length < 4,
-                          child: FloatingActionButton(
-                            onPressed: () async {
-                              if (ficha.classes.length < 4) {
-                                int idClasse = await createNewClass(ficha.id);
-                                Classe newClasse = Classe(idClasse: idClasse);
-                                ficha.classes.add(newClasse);
-                                ficha.sumAll(ficha.classes);
-                                setState(() {});
-                              }
-                            },
-                            mini: true,
-                            backgroundColor: SetColors.primaryRedColor,
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Visibility(
+                              visible: ficha.classes.length < 4,
+                              child: FloatingActionButton(
+                                onPressed: () async {
+                                  if (ficha.classes.length < 4) {
+                                    int idClasse =
+                                        await createNewClass(ficha.id);
+                                    Classe newClasse =
+                                        Classe(idClasse: idClasse);
+                                    ficha.classes.add(newClasse);
+                                    ficha.sumAll(ficha.classes);
+                                    setState(() {});
+                                  }
+                                },
+                                mini: true,
+                                backgroundColor: SetColors.primaryRedColor,
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ],
                     // ATRIBUTOS------------------------------------------------
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          'Habilidade',
+                          style: TextStyle(
+                              fontSize: 14, color: SetColors.secondaryRedColor),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text('Total',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: SetColors.secondaryRedColor)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text('Valor',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: SetColors.secondaryRedColor)),
+                        ),
+                        Text('Mod.Hab',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: SetColors.secondaryRedColor)),
+                        Padding(
+                          padding: EdgeInsets.only(right: 8),
+                          child: Text('Temp',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: SetColors.secondaryRedColor)),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RectangleBox(
                           width: 68,
@@ -318,10 +364,319 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           tableName: '',
                           hintText: 'FOR',
                           enabled: false,
-                        )
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getTotalForca,
+                          tableName: '',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: 'FOR',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getForca,
+                          tableName: 'habilidades',
+                          onChanged: (value) {
+                            ficha.habilidades.setForca(value);
+                            ficha.habilidades.setTotalForca();
+                            ficha.habilidades.setModForca();
+                            setState(() {});
+                          },
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getModForca,
+                          tableName: 'habilidades',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                            nomeColuna: 'mod_temp_FOR',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getModTempForca,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setModTempForca(value);
+                              ficha.habilidades.setTotalForca();
+                              ficha.habilidades.setModForca();
+                              setState(() {});
+                            })
                       ],
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleBox(
+                          width: 68,
+                          nomeColuna: 'habilidades',
+                          id: -1,
+                          initialValue: '',
+                          tableName: '',
+                          hintText: 'DES',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getTotalDestreza,
+                          tableName: '',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: 'DES',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getDestreza,
+                          tableName: 'habilidades',
+                          onChanged: (value) {
+                            ficha.habilidades.setDestreza(value);
+                            ficha.habilidades.setTotalDestreza();
+                            ficha.habilidades.setModDestreza();
+                            setState(() {});
+                          },
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getModDestreza,
+                          tableName: 'habilidades',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                            nomeColuna: 'mod_temp_DES',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getModTempDestreza,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setModTempDestreza(value);
+                              ficha.habilidades.setTotalDestreza();
+                              ficha.habilidades.setModDestreza();
+                              setState(() {});
+                            })
+                      ],
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RectangleBox(
+                            width: 68,
+                            nomeColuna: 'habilidades',
+                            id: -1,
+                            initialValue: '',
+                            tableName: '',
+                            hintText: 'CON',
+                            enabled: false,
+                          ),
+                          SquareBox(
+                            nomeColuna: '',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue:
+                                ficha.habilidades.getTotalConstituicao,
+                            tableName: '',
+                            enabled: false,
+                          ),
+                          SquareBox(
+                            nomeColuna: 'CON',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getConstituicao,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setConstituicao(value);
+                              ficha.habilidades.setTotalConstituicao();
+                              ficha.habilidades.setModConstituicao();
+                              setState(() {});
+                            },
+                          ),
+                          SquareBox(
+                            nomeColuna: '',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getModConstituicao,
+                            tableName: 'habilidades',
+                            enabled: false,
+                          ),
+                          SquareBox(
+                              nomeColuna: 'mod_temp_CON',
+                              id: ficha.habilidades.idHabilidades,
+                              initialValue:
+                                  ficha.habilidades.getModTempConstituicao,
+                              tableName: 'habilidades',
+                              onChanged: (value) {
+                                ficha.habilidades.setModTempConstituicao(value);
+                                ficha.habilidades.setTotalConstituicao();
+                                ficha.habilidades.setModConstituicao();
+                                setState(() {});
+                              })
+                        ],
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleBox(
+                          width: 68,
+                          nomeColuna: 'habilidades',
+                          id: -1,
+                          initialValue: '',
+                          tableName: '',
+                          hintText: 'INT',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getTotalInteligencia,
+                          tableName: '',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: 'INT',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getInteligencia,
+                          tableName: 'habilidades',
+                          onChanged: (value) {
+                            ficha.habilidades.setInteligencia(value);
+                            ficha.habilidades.setTotalInteligencia();
+                            ficha.habilidades.setModInteligencia();
+                            setState(() {});
+                          },
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getModInteligencia,
+                          tableName: 'habilidades',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                            nomeColuna: 'mod_temp_INT',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue:
+                                ficha.habilidades.getModTempInteligencia,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setModTempInteligencia(value);
+                              ficha.habilidades.setTotalInteligencia();
+                              ficha.habilidades.setModInteligencia();
+                              setState(() {});
+                            })
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleBox(
+                          width: 68,
+                          nomeColuna: 'habilidades',
+                          id: -1,
+                          initialValue: '',
+                          tableName: '',
+                          hintText: 'SAB',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getTotalSabedoria,
+                          tableName: '',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: 'SAB',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getSabedoria,
+                          tableName: 'habilidades',
+                          onChanged: (value) {
+                            ficha.habilidades.setSabedoria(value);
+                            ficha.habilidades.setTotalSabedoria();
+                            ficha.habilidades.setModSabedoria();
+                            setState(() {});
+                          },
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getModSabedoria,
+                          tableName: 'habilidades',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                            nomeColuna: 'mod_temp_SAB',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getModTempSabedoria,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setModTempSabedoria(value);
+                              ficha.habilidades.setTotalSabedoria();
+                              ficha.habilidades.setModSabedoria();
+                              setState(() {});
+                            })
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RectangleBox(
+                          width: 68,
+                          nomeColuna: 'habilidades',
+                          id: -1,
+                          initialValue: '',
+                          tableName: '',
+                          hintText: 'CAR',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getTotalCarisma,
+                          tableName: '',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                          nomeColuna: 'CAR',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getCarisma,
+                          tableName: 'habilidades',
+                          onChanged: (value) {
+                            ficha.habilidades.setCarisma(value);
+                            ficha.habilidades.setTotalCarisma();
+                            ficha.habilidades.setModCarisma();
+                            setState(() {});
+                          },
+                        ),
+                        SquareBox(
+                          nomeColuna: '',
+                          id: ficha.habilidades.idHabilidades,
+                          initialValue: ficha.habilidades.getModCarisma,
+                          tableName: 'habilidades',
+                          enabled: false,
+                        ),
+                        SquareBox(
+                            nomeColuna: 'mod_temp_CAR',
+                            id: ficha.habilidades.idHabilidades,
+                            initialValue: ficha.habilidades.getModTempCarisma,
+                            tableName: 'habilidades',
+                            onChanged: (value) {
+                              ficha.habilidades.setModTempCarisma(value);
+                              ficha.habilidades.setTotalCarisma();
+                              ficha.habilidades.setModCarisma();
+                              setState(() {});
+                            })
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

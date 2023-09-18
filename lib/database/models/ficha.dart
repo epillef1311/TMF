@@ -41,6 +41,7 @@ class Ficha {
     int idHabilidade = await buscarIdHabilidade(id);
     habilidades = Habilidades(idHabilidades: idHabilidade);
     habilidades.loadHabilidades(idHabilidade);
+    sumAll(classes);
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(
       'fichas',

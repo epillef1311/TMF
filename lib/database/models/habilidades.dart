@@ -28,6 +28,12 @@ class Habilidades {
   late int _fortitude;
   late int _reflexo;
   late int _vontade;
+  int _totalFor = 0;
+  int _totalDestreza = 0;
+  int _totalConstituicao = 0;
+  int _totalInteligencia = 0;
+  int _totalSabedoria = 0;
+  int _totalCarisma = 0;
 
   Habilidades({required this.idHabilidades});
 
@@ -45,7 +51,7 @@ class Habilidades {
     final Map<String, dynamic> map = maps.first;
     _forca = map['FOR'];
     _destreza = map['DES'];
-    _constituicao = map['CONS'];
+    _constituicao = map['CON'];
     _inteligencia = map['INT'];
     _sabedoria = map['SAB'];
     _carisma = map['CAR'];
@@ -60,6 +66,8 @@ class Habilidades {
     _modTempVontade = map['mod_temp_VON'];
     _caOutros = map['CA_outros'];
     _modTempCA = map['CA_temp'];
+    setAllTotalAtributes();
+    setAllMods();
     return null;
   }
 
@@ -71,76 +79,212 @@ class Habilidades {
     }
   }
 
-  void calcularmodificador(modificador, atributo, modTemp) {
-    modificador = (atributo + modTemp - 10) / 2;
+  int calcularmodificador(int atributo, modTemp) {
+    modTemp ??= 0;
+    return (atributo + modTemp - 10) ~/ 2;
   }
 
   void calcularRestencia(resistencia, atributo, nivel, modTempResis) {
     resistencia = (nivel / 2) + atributo + modTempResis;
   }
 
-  int? get forca => _forca;
+  void setAllMods() {
+    setModForca();
+    setModDestreza();
+    setModConstituicao();
+    setModInteligencia();
+    setModSabedoria();
+    setModCarisma();
+  }
 
-  get destreza => _destreza;
+  void setAllTotalAtributes() {
+    setTotalForca();
+    setTotalDestreza();
+    setTotalConstituicao();
+    setTotalInteligencia();
+    setTotalSabedoria();
+    setTotalCarisma();
+  }
 
-  get constituicao => _constituicao;
+  get getForca => _forca;
+  get getDestreza => _destreza;
+  get getConstituicao => _constituicao;
+  get getInteligencia => _inteligencia;
+  get getSabedoria => _sabedoria;
+  get getCarisma => _carisma;
+  get getModTempForca => _modTempForca;
+  get getModTempDestreza => _modTempDestreza;
+  get getModTempConstituicao => _modTempConstituicao;
+  get getModTempInteligencia => _modTempInteligencia;
+  get getModTempSabedoria => _modTempSabedoria;
+  get getModTempCarisma => _modTempCarisma;
+  get getModTempFortitude => _modTempFortitude;
+  get getModTempReflexo => _modTempReflexo;
+  get getModTempVontade => _modTempVontade;
+  get getCaOutros => _caOutros;
+  get getModTempCA => _modTempCA;
+  get getModForca => _modForca;
+  get getModDestreza => _modDestreza;
+  get getModConstituicao => _modConstituicao;
+  get getModInteligencia => _modInteligencia;
+  get getModSabedoria => _modSabedoria;
+  get getModCarisma => _modCarisma;
+  get getTotalForca => _totalFor;
+  get getTotalDestreza => _totalDestreza;
+  get getTotalConstituicao => _totalConstituicao;
+  get getTotalInteligencia => _totalInteligencia;
+  get getTotalSabedoria => _totalSabedoria;
+  get getTotalCarisma => _totalCarisma;
 
-  get inteligencia => _inteligencia;
+  void setForca(value) {
+    if (value == '') {
+      _forca = 0;
+    } else {
+      _forca = int.parse(value);
+    }
+  }
 
-  get sabedoria => _sabedoria;
+  void setDestreza(value) {
+    if (value == '') {
+      _destreza = 0;
+    } else {
+      _destreza = int.parse(value);
+    }
+  }
 
-  get carisma => _carisma;
+  void setConstituicao(value) {
+    if (value == '') {
+      _constituicao = 0;
+    } else {
+      _constituicao = int.parse(value);
+    }
+  }
 
-  get modTempForca => _modTempForca;
+  void setInteligencia(value) {
+    if (value == '') {
+      _inteligencia = 0;
+    } else {
+      _inteligencia = int.parse(value);
+    }
+  }
 
-  get modTempDestreza => _modTempDestreza;
+  void setSabedoria(value) {
+    if (value == '') {
+      _sabedoria = 0;
+    } else {
+      _sabedoria = int.parse(value);
+    }
+  }
 
-  get modTempConstituicao => _modTempConstituicao;
+  void setCarisma(value) {
+    if (value == '') {
+      _carisma = 0;
+    } else {
+      _carisma = int.parse(value);
+    }
+  }
 
-  get modTempInteligencia => _modTempInteligencia;
+  void setModTempForca(value) {
+    if (value == '') {
+      _modTempForca = 0;
+    } else {
+      _modTempForca = int.parse(value);
+    }
+  }
 
-  get modTempSabedoria => _modTempSabedoria;
+  void setModTempDestreza(value) {
+    if (value == '') {
+      _modTempDestreza = 0;
+    } else {
+      _modTempDestreza = int.parse(value);
+    }
+  }
 
-  get modTempCarisma => _modTempCarisma;
+  void setModTempConstituicao(value) {
+    if (value == '') {
+      _modTempConstituicao = 0;
+    } else {
+      _modTempConstituicao = int.parse(value);
+    }
+  }
 
-  get modTempFortitude => _modTempFortitude;
+  void setModTempInteligencia(value) {
+    if (value == '') {
+      _modTempInteligencia = 0;
+    } else {
+      _modTempInteligencia = int.parse(value);
+    }
+  }
 
-  get modTempReflexo => _modTempReflexo;
+  void setModTempSabedoria(value) {
+    if (value == '') {
+      _modTempSabedoria = 0;
+    } else {
+      _modTempSabedoria = int.parse(value);
+    }
+  }
 
-  get modTempVontade => _modTempVontade;
+  void setModTempCarisma(value) {
+    if (value == '') {
+      _modTempCarisma = 0;
+    } else {
+      _modTempCarisma = int.parse(value);
+    }
+  }
 
-  get caOutros => _caOutros;
+  void setModForca() {
+    final int value = calcularmodificador(getForca, getModTempForca);
+    _modForca = value;
+  }
 
-  get modTempCA => _modTempCA;
+  void setModDestreza() {
+    final int value = calcularmodificador(getDestreza, getModTempDestreza);
+    _modDestreza = value;
+  }
 
-  get modForca => _modForca;
+  void setModConstituicao() {
+    final int value =
+        calcularmodificador(getConstituicao, getModTempConstituicao);
+    _modConstituicao = value;
+  }
 
-  get modDestreza => _modDestreza;
+  void setModInteligencia() {
+    final int value =
+        calcularmodificador(getInteligencia, getModTempInteligencia);
+    _modInteligencia = value;
+  }
 
-  get modConstituicao => _modConstituicao;
+  void setModSabedoria() {
+    final int value = calcularmodificador(getSabedoria, getModTempSabedoria);
+    _modSabedoria = value;
+  }
 
-  get modInteligencia => _modInteligencia;
+  void setModCarisma() {
+    final int value = calcularmodificador(getCarisma, getModTempCarisma);
+    _modCarisma = value;
+  }
 
-  get modSabedoria => _modSabedoria;
+  void setTotalForca() {
+    _totalFor = getForca + getModTempForca;
+  }
 
-  get modCarisma => _modCarisma;
+  void setTotalDestreza() {
+    _totalDestreza = getDestreza + getModTempDestreza;
+  }
 
-  set forca(value) => setAttribute(value, _forca);
-  set destreza(value) => setAttribute(value, _destreza);
-  set constituicao(value) => setAttribute(value, _constituicao);
-  set inteligencia(value) => setAttribute(value, _inteligencia);
-  set sabedoria(value) => setAttribute(value, _sabedoria);
-  set carisma(value) => setAttribute(value, _carisma);
-  set modTempForca(value) => setAttribute(value, _modTempForca);
-  set modTempDestreza(value) => setAttribute(value, _modTempDestreza);
-  set modTempConstituicao(value) => setAttribute(value, _modTempConstituicao);
-  set modTempInteligencia(value) => setAttribute(value, _modTempInteligencia);
-  set modTempSabedoria(value) => setAttribute(value, _modTempSabedoria);
-  set modTempCarisma(value) => setAttribute(value, _modTempCarisma);
-  set modForca(value) => setAttribute(value, _modForca);
-  set modDestreza(value) => setAttribute(value, _modDestreza);
-  set modConstituicao(value) => setAttribute(value, _modConstituicao);
-  set modInteligencia(value) => setAttribute(value, _modInteligencia);
-  set modSabedoria(value) => setAttribute(value, _modSabedoria);
-  set modCarisma(value) => setAttribute(value, _modCarisma);
+  void setTotalConstituicao() {
+    _totalConstituicao = getConstituicao + getModTempConstituicao;
+  }
+
+  void setTotalInteligencia() {
+    _totalInteligencia = getInteligencia + getModTempInteligencia;
+  }
+
+  void setTotalSabedoria() {
+    _totalSabedoria = getSabedoria + getModTempSabedoria;
+  }
+
+  void setTotalCarisma() {
+    _totalCarisma = getCarisma + getModTempCarisma;
+  }
 }

@@ -74,17 +74,17 @@ class DB {
     INT INTEGER DEFAULT 10,
     SAB INTEGER DEFAULT 10,
     CAR INTEGER DEFAULT 10,
-    mod_temp_FOR INTEGER,
-    mod_temp_DES INTEGER,
-    mod_temp_CON INTEGER,
-    mod_temp_INT INTEGER,
-    mod_temp_SAB INTEGER,
-    mod_temp_CAR INTEGER,
-    mod_temp_FORT TEXT,
-    mod_temp_REF TEXT,
-    mod_temp_VON TEXT,
-    CA_outros INTEGER,
-    CA_temp INTEGER
+    mod_temp_FOR INTEGER DEFAULT 0,
+    mod_temp_DES INTEGER DEFAULT 0,
+    mod_temp_CON INTEGER DEFAULT 0,
+    mod_temp_INT INTEGER DEFAULT 0,
+    mod_temp_SAB INTEGER DEFAULT 0,
+    mod_temp_CAR INTEGER DEFAULT 0,
+    mod_temp_FORT INTEGER DEFAULT 0,
+    mod_temp_REF INTEGER DEFAULT 0,
+    mod_temp_VON INTEGER DEFAULT 0,
+    CA_outros INTEGER DEFAULT 0,
+    CA_temp INTEGER DEFAULT 0
 )''';
 
   String get _tabelaHabilidadeFicha => '''
