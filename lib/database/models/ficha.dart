@@ -1,5 +1,6 @@
 import 'package:app/database/db.dart';
 import 'package:app/database/models/classe.dart';
+import 'package:app/database/models/habilidades.dart';
 
 class Ficha {
   final int id;
@@ -25,6 +26,7 @@ class Ficha {
   int _totalLevel = 0;
   int _totalBba = 0;
   int _totalPv = 0;
+  late Habilidades habilidades;
 
   List<Classe> classes = [];
   List<int> idClasses = [];
@@ -33,6 +35,118 @@ class Ficha {
     required this.id,
     required this.nome,
   });
+
+  Future<Ficha?> loadFicha(int id) async {
+    await buscarClassesPorIdFicha(id);
+    int idHabilidade = await buscarIdHabilidade(id);
+    habilidades = Habilidades(idHabilidades: idHabilidade);
+    habilidades.loadHabilidades(idHabilidade);
+    final database = await DB.instance.database;
+    final List<Map<String, dynamic>> maps = await database.query(
+      'fichas',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isEmpty) {
+      return null;
+    }
+    final Map<String, dynamic> map = maps.first;
+    _tibar = map['tibar'];
+    _tibarPrata = map['tibar_prata'];
+    _tibarOuro = map['tibar_ouro'];
+    _tibarPlatina = map['tibar_platina'];
+    _xpAtual = map['xp_atual'];
+    _pontoAcao = map['ponto_acao'];
+    _linguagens = map['linguagens'];
+    _sexo = map['sexo'];
+    _tendencia = map['tendencia'];
+    _tamanho = map['tamanho'];
+    _deslocamento = map['deslocamento'];
+    _divindade = map['divindade'];
+    _bio = map['bio'];
+    _imagem = map['imagem'];
+    _manaTotal = map['mana_total'];
+    _manaAtual = map['mana_atual'];
+    _energia = map['energia'];
+    _raca = map['raca'];
+
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> buscarClassesPorIdFicha(
+      int idFicha) async {
+    final database = await DB.instance.database;
+
+    final List<Map<String, dynamic>> resultados = await database.rawQuery(
+      'SELECT * FROM classe_ficha WHERE id_ficha = ?',
+      [idFicha],
+    );
+    await loadClasses(resultados);
+    return resultados;
+  }
+
+  loadClasses(List<Map<String, dynamic>> listaClasses) {
+    classes = [];
+    idClasses = [];
+    for (final classe in listaClasses) {
+      final idClasse = classe['id_classe'];
+      final classeFicha = Classe(idClasse: idClasse);
+
+      classeFicha.loadClasse(idClasse);
+      if (idClasses.contains(classeFicha.idClasse)) {
+        //idClasses.add(classeFicha.idClasse);
+        continue;
+      } else {
+        idClasses.add(classeFicha.idClasse);
+        classes.add(classeFicha);
+      }
+    }
+  }
+
+  sumClassLevel(List<Classe> classes) {
+    int totalLevel = 0;
+    for (Classe classe in classes) {
+      if (classe.getNivel == null) {
+        continue;
+      } else {
+        totalLevel += classe.getNivel as int;
+      }
+    }
+    _totalLevel = totalLevel;
+    return totalLevel;
+  }
+
+  sumClassBba(List<Classe> classes) {
+    int totalBba = 0;
+    for (Classe classe in classes) {
+      if (classe.getBba == null) {
+        continue;
+      } else {
+        totalBba += classe.getBba as int;
+      }
+    }
+    _totalBba = totalBba;
+    return totalBba;
+  }
+
+  void sumClassPv(List<Classe> classes) {
+    int totalPv = 0;
+    for (Classe classe in classes) {
+      if (classe.getPv == null) {
+        continue;
+      } else {
+        totalPv += classe.getPv as int;
+      }
+    }
+    _totalPv = totalPv;
+  }
+
+  void sumAll(List<Classe> classes) {
+    sumClassBba(classes);
+    sumClassLevel(classes);
+    sumClassPv(classes);
+  }
 
   // START OF GETTERS AND SETTERS-----------------------------------------------
   String get getNome => nome;
@@ -171,113 +285,4 @@ class Ficha {
 
   get getTotalPv => _totalPv;
   //END OF GETTERS AND SETTERS--------------------------------------------------
-
-  Future<Ficha?> loadFicha(int id) async {
-    await buscarClassesPorIdFicha(id);
-    final database = await DB.instance.database;
-    final List<Map<String, dynamic>> maps = await database.query(
-      'fichas',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-
-    if (maps.isEmpty) {
-      return null;
-    }
-    final Map<String, dynamic> map = maps.first;
-    _tibar = map['tibar'];
-    _tibarPrata = map['tibar_prata'];
-    _tibarOuro = map['tibar_ouro'];
-    _tibarPlatina = map['tibar_platina'];
-    _xpAtual = map['xp_atual'];
-    _pontoAcao = map['ponto_acao'];
-    _linguagens = map['linguagens'];
-    _sexo = map['sexo'];
-    _tendencia = map['tendencia'];
-    _tamanho = map['tamanho'];
-    _deslocamento = map['deslocamento'];
-    _divindade = map['divindade'];
-    _bio = map['bio'];
-    _imagem = map['imagem'];
-    _manaTotal = map['mana_total'];
-    _manaAtual = map['mana_atual'];
-    _energia = map['energia'];
-    _raca = map['raca'];
-
-    return null;
-  }
-
-  Future<List<Map<String, dynamic>>> buscarClassesPorIdFicha(
-      int idFicha) async {
-    final database = await DB.instance.database;
-
-    final List<Map<String, dynamic>> resultados = await database.rawQuery(
-      'SELECT * FROM classe_ficha WHERE id_ficha = ?',
-      [idFicha],
-    );
-    await loadClasses(resultados);
-    return resultados;
-  }
-
-  loadClasses(List<Map<String, dynamic>> listaClasses) {
-    classes = [];
-    idClasses = [];
-    for (final classe in listaClasses) {
-      final idClasse = classe['id_classe'];
-      final classeFicha = Classe(idClasse: idClasse);
-
-      classeFicha.loadClasse(idClasse);
-      if (idClasses.contains(classeFicha.idClasse)) {
-        //idClasses.add(classeFicha.idClasse);
-        continue;
-      } else {
-        idClasses.add(classeFicha.idClasse);
-        classes.add(classeFicha);
-      }
-    }
-  }
-
-  sumClassLevel(List<Classe> classes) {
-    int totalLevel = 0;
-    for (Classe classe in classes) {
-      if (classe.getNivel == null) {
-        continue;
-      } else {
-        totalLevel += classe.getNivel as int;
-      }
-    }
-    _totalLevel = totalLevel;
-    return totalLevel;
-  }
-
-  sumClassBba(List<Classe> classes) {
-    int totalBba = 0;
-    for (Classe classe in classes) {
-      if (classe.getBba == null) {
-        continue;
-      } else {
-        totalBba += classe.getBba as int;
-      }
-    }
-    _totalBba = totalBba;
-    return totalBba;
-  }
-
-  void sumClassPv(List<Classe> classes) {
-    int totalPv = 0;
-    for (Classe classe in classes) {
-      if (classe.getPv == null) {
-        continue;
-      } else {
-        totalPv += classe.getPv as int;
-      }
-    }
-    _totalPv = totalPv;
-  }
-
-  void sumAll(List<Classe> classes) {
-    sumClassBba(classes);
-    sumClassLevel(classes);
-    sumClassPv(classes);
-  }
 }

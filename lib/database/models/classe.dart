@@ -1,7 +1,7 @@
 import 'package:app/database/db.dart';
 
 class Classe {
-  final int idClasse;
+  int idClasse;
   int? _nivel;
   String? _nome;
   int? _pv;

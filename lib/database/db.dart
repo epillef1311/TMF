@@ -328,3 +328,42 @@ Future<void> deleteClass(int classId, int fichaId) async {
         where: 'id_classe = ? AND id_ficha = ?', whereArgs: [classId, fichaId]);
   });
 }
+
+Future createNewHabilities(int id) async {
+  final database = await DB.instance.database;
+  int idHabilidades = -1;
+  await database.transaction((txn) async {
+    idHabilidades = await txn.insert('habilidades', {'FOR': 10});
+  });
+  await database.transaction((txn) async {
+    await txn.insert(
+        'habilidade_ficha', {'id_habilidade': idHabilidades, 'id_ficha': id});
+  });
+  return idHabilidades;
+}
+
+Future<void> deleteHabilities(int habilidadeId, int fichaId) async {
+  final database = await DB.instance.database;
+  await database.transaction((txn) async {
+    await txn.delete('habilidades', where: 'id = ?', whereArgs: [habilidadeId]);
+  });
+  await database.transaction((txn) async {
+    await txn.delete('habilidade_ficha',
+        where: 'id_habilidade = ? AND id_ficha = ?',
+        whereArgs: [habilidadeId, fichaId]);
+  });
+}
+
+Future<int> buscarIdHabilidade(int idFicha) async {
+  final database = await DB.instance.database;
+  final result = await database.query(
+    'habilidade_ficha',
+    where: 'id_ficha = ?',
+    whereArgs: [idFicha],
+  );
+  if (result.isNotEmpty) {
+    final id = result.first['id_habilidade'] as int;
+    return id;
+  }
+  return -1;
+}

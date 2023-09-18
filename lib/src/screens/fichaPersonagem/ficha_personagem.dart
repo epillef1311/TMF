@@ -312,7 +312,7 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                       children: [
                         RectangleBox(
                           width: 68,
-                          nomeColuna: '',
+                          nomeColuna: 'habilidades',
                           id: -1,
                           initialValue: '',
                           tableName: '',
