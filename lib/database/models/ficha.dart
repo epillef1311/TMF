@@ -1,6 +1,7 @@
 import 'package:app/database/db.dart';
 import 'package:app/database/models/classe.dart';
 import 'package:app/database/models/habilidades.dart';
+import 'package:app/database/models/pericia.dart';
 
 class Ficha {
   final int id;
@@ -27,7 +28,7 @@ class Ficha {
   int _totalBba = 0;
   int _totalPv = 0;
   late Habilidades habilidades;
-
+  List<Pericia> pericias = [];
   List<Classe> classes = [];
   List<int> idClasses = [];
 
@@ -38,10 +39,11 @@ class Ficha {
 
   Future<Ficha?> loadFicha(int id) async {
     await buscarClassesPorIdFicha(id);
+    sumAll(classes);
     int idHabilidade = await buscarIdHabilidade(id);
     habilidades = Habilidades(idHabilidades: idHabilidade);
     habilidades.loadHabilidades(idHabilidade);
-    sumAll(classes);
+    buscarPericiasPorIdFicha(id);
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(
       'fichas',
@@ -103,6 +105,32 @@ class Ficha {
         classes.add(classeFicha);
       }
     }
+  }
+
+  loadPericias(List<int> listaIdPericias) {
+    pericias = [];
+    for (final idPericia in listaIdPericias) {
+      final pericia = Pericia(idPericia: idPericia);
+      pericia.loadPericia(id, idPericia);
+      pericias.add(pericia);
+    }
+  }
+
+  Future<List<int>> buscarPericiasPorIdFicha(int idFicha) async {
+    final database = await DB.instance.database;
+    final List<Map<String, dynamic>> maps = await database.query(
+      'pericias_ficha',
+      columns: ['id_pericia'],
+      where: 'id_ficha = ?',
+      whereArgs: [idFicha],
+    );
+
+    final List<int> periciaIDs = [];
+    for (final map in maps) {
+      periciaIDs.add(map['id_pericia']);
+    }
+    loadPericias(periciaIDs);
+    return periciaIDs;
   }
 
   sumClassLevel(List<Classe> classes) {

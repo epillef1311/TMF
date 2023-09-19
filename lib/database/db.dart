@@ -367,3 +367,27 @@ Future<int> buscarIdHabilidade(int idFicha) async {
   }
   return -1;
 }
+
+Future createPericias(int idFicha) async {
+  final database = await DB.instance.database;
+  final List<Map<String, dynamic>> maps =
+      await database.query('pericias', columns: ['id']);
+
+  final List<int> periciasIds = [];
+  for (final map in maps) {
+    periciasIds.add(map['id']);
+  }
+  for (final idPericia in periciasIds) {
+    await database.insert(
+        'pericias_ficha', {'id_ficha': idFicha, 'id_pericia': idPericia});
+  }
+}
+
+Future<void> deletePericias(int habilidadeId, int fichaId) async {
+  final database = await DB.instance.database;
+  await database.transaction((txn) async {
+    await txn.delete('pericias_ficha',
+        where: 'id_habilidade = ? AND id_ficha = ?',
+        whereArgs: [habilidadeId, fichaId]);
+  });
+}

@@ -48,6 +48,7 @@ class _AlertDialogFichaState extends State<AlertDialogFicha> {
                     id = await DB.instance.inserirNome(nomeController.text);
                     createNewClass(id);
                     createNewHabilities(id);
+                    createPericias(id);
                     Navigator.of(context).pop();
                     nomeController.text = '';
                   },
