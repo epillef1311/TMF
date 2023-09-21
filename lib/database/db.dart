@@ -37,6 +37,31 @@ class DB {
     await db.execute(_tabelaClasseFicha);
     await db.execute(_tabelaAtaques);
     await db.execute(_tabelaAtaqueFicha);
+    await db.rawInsert(''' 
+    INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura)
+      VALUES
+      ( 'Adestrar_Animais', 1, 0),
+      ( 'Acrobacia', 0, 1),
+      ( 'Atletismo', 0, 1),
+      ( 'Atuação', 0, 0),
+      ( 'Cavalgar', 0, 0),
+      ( 'Conhecimento', 1, 0),
+      ( 'Cura', 0, 0),
+      ( 'Diplomacia', 0, 0),
+      ( 'Enganação', 0, 0),
+      ( 'Furtividade', 0, 1),
+      ( 'Identificar Magia', 1, 0),
+      ( 'Iniciativa', 0, 0),
+      ( 'Intimidação', 0, 0),
+      ( 'Intuição', 0, 0),
+      ( 'Jogatina', 0, 0),
+      ( 'Ladinagem', 1, 1),
+      ( 'Meditação', 0, 0),
+      ( 'Obter_Informação', 0, 0),
+      ( 'Ofício', 0, 0),
+      ( 'Percepção', 0, 0),
+      ( 'Sobrevivência', 0, 0)
+    ''');
   }
 
   String get _fichas => '''
@@ -124,30 +149,6 @@ class DB {
         somente_treinado INTEGER,
         penalidade_armadura INTEGER
         );
-      
-      INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura)
-      VALUES
-      ( 'Adestrar_Animais', 1, 0),
-      ( 'Acrobacia', 0, 1),
-      ( 'Atletismo', 0, 1),
-      ( 'Atuação', 0, 0),
-      ( 'Cavalgar', 0, 0),
-      ( 'Conhecimento', 1, 0),
-      ( 'Cura', 0, 0),
-      ( 'Diplomacia', 0, 0),
-      ( 'Enganação', 0, 0),
-      ( 'Furtividade', 0, 1),
-      ( 'Identificar Magia', 1, 0),
-      ( 'Iniciativa', 0, 0),
-      ( 'Intimidação', 0, 0),
-      ( 'Intuição', 0, 0),
-      ( 'Jogatina', 0, 0),
-      ( 'Ladinagem', 1, 1),
-      ( 'Meditação', 0, 0),
-      ( 'Obter_Informação', 0, 0),
-      ( 'Ofício', 0, 0),
-      ( 'Percepção', 0, 0),
-      ( 'Sobrevivência', 0, 0)
     ''';
 
   String get _tabelaPericiasFicha => '''
@@ -373,6 +374,7 @@ Future createPericias(int idFicha) async {
   final List<Map<String, dynamic>> maps =
       await database.query('pericias', columns: ['id']);
 
+  if (maps.isEmpty) {}
   final List<int> periciasIds = [];
   for (final map in maps) {
     periciasIds.add(map['id']);
@@ -390,4 +392,13 @@ Future<void> deletePericias(int habilidadeId, int fichaId) async {
         where: 'id_habilidade = ? AND id_ficha = ?',
         whereArgs: [habilidadeId, fichaId]);
   });
+}
+
+Future<List<String>> getAllPericiaNames() async {
+  final database = await DB.instance.database;
+  final List<Map<String, dynamic>> results =
+      await database.query('pericias', columns: ['nome_pericia']);
+  final lista =
+      results.map((result) => result['nome_pericia'] as String).toList();
+  return lista;
 }
