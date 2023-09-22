@@ -177,6 +177,56 @@ class Ficha {
     sumClassPv(classes);
   }
 
+  void calcularTotalPericia(int index) {
+    int valorTreinado = 0;
+    if (pericias[index].treinado == true) {
+      valorTreinado = 3;
+    }
+    if (pericias[index].atributoModificador == 'FOR') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getForca) as int;
+    }
+
+    if (pericias[index].atributoModificador == 'DEX') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getDestreza) as int;
+    }
+    if (pericias[index].atributoModificador == 'CON') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getConstituicao) as int;
+    }
+    if (pericias[index].atributoModificador == 'INT') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getInteligencia) as int;
+    }
+    if (pericias[index].atributoModificador == 'SAB') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getSabedoria) as int;
+    }
+    if (pericias[index].atributoModificador == 'CAR') {
+      pericias[index].total = (pericias[index].modOutrosPericia +
+          pericias[index].modTempPericia +
+          _totalLevel +
+          valorTreinado +
+          habilidades.getCarisma) as int;
+    }
+  }
+
   // START OF GETTERS AND SETTERS-----------------------------------------------
   String get getNome => nome;
 

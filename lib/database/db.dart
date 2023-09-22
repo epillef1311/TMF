@@ -37,30 +37,32 @@ class DB {
     await db.execute(_tabelaClasseFicha);
     await db.execute(_tabelaAtaques);
     await db.execute(_tabelaAtaqueFicha);
+    await db.execute(_tabelaArmaduraEscudo);
+    await db.execute(_tabelaArmadurasFicha);
     await db.rawInsert(''' 
-    INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura)
+    INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura,atributo_modificador)
       VALUES
-      ( 'Adestrar_Animais', 1, 0),
-      ( 'Acrobacia', 0, 1),
-      ( 'Atletismo', 0, 1),
-      ( 'Atuação', 0, 0),
-      ( 'Cavalgar', 0, 0),
-      ( 'Conhecimento', 1, 0),
-      ( 'Cura', 0, 0),
-      ( 'Diplomacia', 0, 0),
-      ( 'Enganação', 0, 0),
-      ( 'Furtividade', 0, 1),
-      ( 'Identificar Magia', 1, 0),
-      ( 'Iniciativa', 0, 0),
-      ( 'Intimidação', 0, 0),
-      ( 'Intuição', 0, 0),
-      ( 'Jogatina', 0, 0),
-      ( 'Ladinagem', 1, 1),
-      ( 'Meditação', 0, 0),
-      ( 'Obter_Informação', 0, 0),
-      ( 'Ofício', 0, 0),
-      ( 'Percepção', 0, 0),
-      ( 'Sobrevivência', 0, 0)
+      ( 'Acrobacia', 0, 1,'DEX'),
+      ( 'Adestrar Animais', 1, 0,'CAR'),
+      ( 'Atletismo', 0, 1,'FOR'),
+      ( 'Atuação', 0, 0,'CAR'),
+      ( 'Cavalgar', 0, 0,'DEX'),
+      ( 'Conhecimento', 1, 0,'INT'),
+      ( 'Curar', 0, 0,'SAB'),
+      ( 'Diplomacia', 0, 0,'CAR'),
+      ( 'Enganação', 0, 0,'CAR'),
+      ( 'Furtividade', 0, 1,'DEX'),
+      ( 'Identificar Magia', 1, 0,'INT'),
+      ( 'Iniciativa', 0, 0,'DEX'),
+      ( 'Intimidação', 0, 0,'CAR'),
+      ( 'Intuição', 0, 0,'SAB'),
+      ( 'Jogatina', 0, 0,'CAR'),
+      ( 'Ladinagem', 1, 1,'DEX'),
+      ( 'Meditação', 0, 0,'SAB'),
+      ( 'Obter_Informação', 0, 0,'CAR'),
+      ( 'Ofício', 0, 0,'INT'),
+      ( 'Percepção', 0, 0,'SAB'),
+      ( 'Sobrevivência', 0, 0,'SAB')
     ''');
   }
 
@@ -147,7 +149,8 @@ class DB {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome_pericia TEXT,
         somente_treinado INTEGER,
-        penalidade_armadura INTEGER
+        penalidade_armadura INTEGER,
+        atributo_modificador TEXT
         );
     ''';
 
@@ -246,6 +249,27 @@ class DB {
       FOREIGN KEY(id_ficha) REFERENCES fichas(id),
       FOREIGN KEY(id_ataque) REFERENCES ataques(id)
     )
+''';
+
+  String get _tabelaArmaduraEscudo => '''
+      CREATE TABLE armaduras(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome_armadura TEXT,
+        bonus_ca INTEGER DEFAULT 0,
+        maximo_destreza INTEGER,
+        tipo_armadura TEXT,
+      )
+''';
+
+  String get _tabelaArmadurasFicha => '''
+      CREATE TABLE armaduras_ficha(
+        id_ficha INTEGER,
+        id_armadura INTEGER,
+        FOREIGN KEY(id_ficha) REFERENCES fichas(id),
+        FOREIGN KEY(id_armadura) REFERENCES armaduras(id)
+      )
+
+
 ''';
 
 //------------------------------------------------------------------------------
@@ -401,4 +425,13 @@ Future<List<String>> getAllPericiaNames() async {
   final lista =
       results.map((result) => result['nome_pericia'] as String).toList();
   return lista;
+}
+
+Future<void> updatePericias(String coluna, String tabela, dynamic value,
+    int idFicha, int idPericia) async {
+  final database = await DB.instance.database;
+
+  await database.update('pericias_ficha', {coluna: value},
+      where: 'id_ficha = ? AND id_pericia = ?',
+      whereArgs: [idFicha, idPericia]);
 }

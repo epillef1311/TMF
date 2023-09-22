@@ -1,4 +1,6 @@
 import 'package:app/app/widgets/fichaWidget/Text_field.dart';
+import 'package:app/app/widgets/fichaWidget/check_box.dart';
+import 'package:app/database/db.dart';
 import 'package:app/database/models/ficha.dart';
 import 'package:app/app/themes/colors.dart';
 import 'package:flutter/material.dart';
@@ -68,13 +70,34 @@ class _FichaPericiasState extends State<FichaPericias> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SquareBox(
-                              nomeColuna: '',
-                              id: ficha.pericias[index].idPericia,
-                              initialValue: 0,
-                              tableName: '',
-                              enabled: false,
-                            ),
+                            CheckBoxPericia(
+                                idPericia: ficha.pericias[index].idPericia,
+                                idFicha: ficha.id,
+                                tabela: 'pericias_ficha',
+                                treinado: ficha.pericias[index].treinado,
+                                onChanged: (newBool) {
+                                  setState(() {
+                                    ficha.pericias[index].treinado = newBool!;
+                                    if (newBool == true) {
+                                      final a = 1;
+                                      updatePericias(
+                                          'treinado',
+                                          'pericias_ficha',
+                                          a,
+                                          ficha.id,
+                                          ficha.pericias[index].idPericia);
+                                    } else {
+                                      final a = 0;
+                                      updatePericias(
+                                          'treinado',
+                                          'pericias_ficha',
+                                          a,
+                                          ficha.id,
+                                          ficha.pericias[index].idPericia);
+                                    }
+                                  });
+                                },
+                                coluna: 'treinado'),
                             RectangleBox(
                               width: 139,
                               nomeColuna: '',
@@ -93,6 +116,12 @@ class _FichaPericiasState extends State<FichaPericias> {
                             ),
                             SquareBox(
                                 nomeColuna: 'mod_temp_pericia',
+                                id: ficha.pericias[index].idPericia,
+                                initialValue:
+                                    ficha.pericias[index].modOutrosPericia,
+                                tableName: ''),
+                            SquareBox(
+                                nomeColuna: 'mod_outros_pericia',
                                 id: ficha.pericias[index].idPericia,
                                 initialValue:
                                     ficha.pericias[index].modOutrosPericia,

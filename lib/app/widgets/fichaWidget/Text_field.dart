@@ -89,7 +89,7 @@ class _SquareBoxState extends State<SquareBox> {
         child: TextField(
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
           controller: _controller,
           focusNode: _focusNode,
