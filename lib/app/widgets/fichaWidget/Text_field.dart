@@ -216,3 +216,128 @@ class _RectangleBoxState extends State<RectangleBox> {
     );
   }
 }
+
+class SquareBoxPericia extends StatefulWidget {
+  late TextEditingController squareControler;
+  final String nomeColuna;
+  final int idFicha;
+  final int idPericia;
+  int? initialValue;
+  final String tableName;
+  final void Function(String)? onChanged;
+
+  bool enabled;
+
+  SquareBoxPericia({
+    required this.nomeColuna,
+    required this.idFicha,
+    required this.idPericia,
+    required this.initialValue,
+    required this.tableName,
+    this.onChanged,
+    this.enabled = true,
+    Key? key,
+  }) : super(key: key) {
+    squareControler = TextEditingController();
+  }
+
+  @override
+  State<SquareBoxPericia> createState() => _SquareBoxPericiaState();
+}
+
+class _SquareBoxPericiaState extends State<SquareBoxPericia> {
+  late TextEditingController _controller;
+  FocusNode _focusNode = FocusNode();
+
+  redrawWidget() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = widget.squareControler;
+    _focusNode = FocusNode();
+    if (widget.enabled == true) {
+      _focusNode.addListener(() {
+        if (!_focusNode.hasFocus) {
+          setState(() {
+            int? newValue = int.tryParse(_controller.text);
+            updatePericias(widget.nomeColuna, widget.tableName, newValue,
+                widget.idFicha, widget.idPericia);
+          });
+        }
+      });
+    }
+
+    if (widget.initialValue == null) {
+      _controller.text = '0';
+    } else {
+      int j = widget.initialValue!;
+      String t = '$j';
+      _controller.text = t;
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.enabled == true) {
+      return Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 2, color: SetColors.primaryRedColor),
+          color: SetColors.backGroundColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 1,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
+        child: TextField(
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          style: const TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+          controller: _controller,
+          focusNode: _focusNode,
+          onChanged: widget.onChanged,
+          enabled: widget.enabled,
+        ),
+      );
+    } else {
+      int? valor = widget.initialValue;
+      return Container(
+        height: 50,
+        width: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 2, color: SetColors.primaryRedColor),
+          color: SetColors.backGroundColor,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 1,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          '$valor',
+          style: const TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+  }
+}

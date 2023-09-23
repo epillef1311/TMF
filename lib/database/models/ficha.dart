@@ -130,6 +130,9 @@ class Ficha {
       periciaIDs.add(map['id_pericia']);
     }
     loadPericias(periciaIDs);
+    /*for (Pericia pericia in pericias) {
+      calcularTotalPericia();
+    }*/
     return periciaIDs;
   }
 

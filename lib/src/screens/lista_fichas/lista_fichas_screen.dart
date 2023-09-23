@@ -62,6 +62,7 @@ class _ListaFichasState extends State<ListaFichas> {
                       },
                       onPressed: () async {
                         await ficha.loadFicha(ficha.id);
+
                         Navigator.of(context)
                             .pushNamed('bottonNavBar', arguments: ficha)
                             .then((_) {

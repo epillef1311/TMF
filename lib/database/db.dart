@@ -257,7 +257,7 @@ class DB {
         nome_armadura TEXT,
         bonus_ca INTEGER DEFAULT 0,
         maximo_destreza INTEGER,
-        tipo_armadura TEXT,
+        tipo_armadura TEXT
       )
 ''';
 
@@ -424,6 +424,7 @@ Future<List<String>> getAllPericiaNames() async {
       await database.query('pericias', columns: ['nome_pericia']);
   final lista =
       results.map((result) => result['nome_pericia'] as String).toList();
+
   return lista;
 }
 
