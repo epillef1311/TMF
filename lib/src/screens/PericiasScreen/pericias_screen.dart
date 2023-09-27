@@ -95,6 +95,7 @@ class _FichaPericiasState extends State<FichaPericias> {
                                           ficha.id,
                                           ficha.pericias[index].idPericia);
                                     }
+                                    ficha.calcularTotalPericia(index);
                                   });
                                 },
                                 coluna: 'treinado'),

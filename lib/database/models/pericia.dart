@@ -1,7 +1,7 @@
 import 'package:app/database/db.dart';
 
 class Pericia {
-  int idPericia;
+  final int idPericia;
   late bool treinado;
   late int modTempPericia;
   late int modOutrosPericia;
@@ -9,7 +9,7 @@ class Pericia {
   late String nomePericia;
   late int somenteTreinado;
   late int penalidadeArmadura;
-  late int total;
+  late int total = 0;
   late String atributoModificador;
 
   Pericia({required this.idPericia});

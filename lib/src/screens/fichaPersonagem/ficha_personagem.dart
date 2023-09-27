@@ -199,6 +199,7 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                                     onChanged: (value) {
                                       ficha.classes[index].setNivel(value);
                                       ficha.sumClassLevel(ficha.classes);
+                                      ficha.atualizarTotalPericias();
                                       setState(() {});
                                     },
                                   ),
@@ -378,9 +379,14 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           initialValue: ficha.habilidades.getForca,
                           tableName: 'habilidades',
                           onChanged: (value) {
+                            int a = ficha.habilidades.getModForca;
                             ficha.habilidades.setForca(value);
                             ficha.habilidades.setTotalForca();
                             ficha.habilidades.setModForca();
+                            if (a != ficha.habilidades.getModForca) {
+                              ficha.calcularTotalPericia(2);
+                            }
+
                             setState(() {});
                           },
                         ),
@@ -397,9 +403,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                             initialValue: ficha.habilidades.getModTempForca,
                             tableName: 'habilidades',
                             onChanged: (value) {
+                              int a = ficha.habilidades.getModForca;
                               ficha.habilidades.setModTempForca(value);
                               ficha.habilidades.setTotalForca();
                               ficha.habilidades.setModForca();
+                              if (a != ficha.habilidades.getModForca) {
+                                ficha.calcularTotalPericia(2);
+                              }
                               setState(() {});
                             })
                       ],
@@ -432,9 +442,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           initialValue: ficha.habilidades.getDestreza,
                           tableName: 'habilidades',
                           onChanged: (value) {
+                            int a = ficha.habilidades.getModDestreza;
                             ficha.habilidades.setDestreza(value);
                             ficha.habilidades.setTotalDestreza();
                             ficha.habilidades.setModDestreza();
+                            if (a != ficha.habilidades.getModDestreza) {
+                              ficha.atualizarTodasDestreza();
+                            }
                             setState(() {});
                           },
                         ),
@@ -451,9 +465,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                             initialValue: ficha.habilidades.getModTempDestreza,
                             tableName: 'habilidades',
                             onChanged: (value) {
+                              int a = ficha.habilidades.getModDestreza;
                               ficha.habilidades.setModTempDestreza(value);
                               ficha.habilidades.setTotalDestreza();
                               ficha.habilidades.setModDestreza();
+                              if (a != ficha.habilidades.getModDestreza) {
+                                ficha.atualizarTodasDestreza();
+                              }
                               setState(() {});
                             })
                       ],
@@ -541,9 +559,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           initialValue: ficha.habilidades.getInteligencia,
                           tableName: 'habilidades',
                           onChanged: (value) {
+                            int a = ficha.habilidades.getModInteligencia;
                             ficha.habilidades.setInteligencia(value);
                             ficha.habilidades.setTotalInteligencia();
                             ficha.habilidades.setModInteligencia();
+                            if (a != ficha.habilidades.getModInteligencia) {
+                              ficha.atualizarTodasPericiasInteligencia();
+                            }
                             setState(() {});
                           },
                         ),
@@ -561,9 +583,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                                 ficha.habilidades.getModTempInteligencia,
                             tableName: 'habilidades',
                             onChanged: (value) {
+                              int a = ficha.habilidades.getModInteligencia;
                               ficha.habilidades.setModTempInteligencia(value);
                               ficha.habilidades.setTotalInteligencia();
                               ficha.habilidades.setModInteligencia();
+                              if (a != ficha.habilidades.getModInteligencia) {
+                                ficha.atualizarTodasPericiasInteligencia();
+                              }
                               setState(() {});
                             })
                       ],
@@ -596,9 +622,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           initialValue: ficha.habilidades.getSabedoria,
                           tableName: 'habilidades',
                           onChanged: (value) {
+                            int a = ficha.habilidades.getModSabedoria;
                             ficha.habilidades.setSabedoria(value);
                             ficha.habilidades.setTotalSabedoria();
                             ficha.habilidades.setModSabedoria();
+                            if (a != ficha.habilidades.getModSabedoria) {
+                              ficha.atualizarTodasPericiasSabedoria();
+                            }
                             setState(() {});
                           },
                         ),
@@ -615,9 +645,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                             initialValue: ficha.habilidades.getModTempSabedoria,
                             tableName: 'habilidades',
                             onChanged: (value) {
+                              int a = ficha.habilidades.getModSabedoria;
                               ficha.habilidades.setModTempSabedoria(value);
                               ficha.habilidades.setTotalSabedoria();
                               ficha.habilidades.setModSabedoria();
+                              if (a != ficha.habilidades.getModSabedoria) {
+                                ficha.atualizarTodasPericiasSabedoria();
+                              }
                               setState(() {});
                             })
                       ],
@@ -650,9 +684,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                           initialValue: ficha.habilidades.getCarisma,
                           tableName: 'habilidades',
                           onChanged: (value) {
+                            int a = ficha.habilidades.getModCarisma;
                             ficha.habilidades.setCarisma(value);
                             ficha.habilidades.setTotalCarisma();
                             ficha.habilidades.setModCarisma();
+                            if (a != ficha.habilidades.getModCarisma) {
+                              ficha.atualizarTodasPericiasCarisma();
+                            }
                             setState(() {});
                           },
                         ),
@@ -669,9 +707,13 @@ class _FichaPersonagemState extends State<FichaPersonagem> {
                             initialValue: ficha.habilidades.getModTempCarisma,
                             tableName: 'habilidades',
                             onChanged: (value) {
+                              int a = ficha.habilidades.getModCarisma;
                               ficha.habilidades.setModTempCarisma(value);
                               ficha.habilidades.setTotalCarisma();
                               ficha.habilidades.setModCarisma();
+                              if (a != ficha.habilidades.getModCarisma) {
+                                ficha.atualizarTodasPericiasCarisma();
+                              }
                               setState(() {});
                             })
                       ],

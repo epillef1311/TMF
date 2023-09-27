@@ -39,11 +39,11 @@ class Ficha {
 
   Future<Ficha?> loadFicha(int id) async {
     await buscarClassesPorIdFicha(id);
-    sumAll(classes);
     int idHabilidade = await buscarIdHabilidade(id);
     habilidades = Habilidades(idHabilidades: idHabilidade);
     habilidades.loadHabilidades(idHabilidade);
-    buscarPericiasPorIdFicha(id);
+    sumAll(classes);
+    await buscarPericiasPorIdFicha(id);
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(
       'fichas',
@@ -107,11 +107,11 @@ class Ficha {
     }
   }
 
-  loadPericias(List<int> listaIdPericias) {
+  loadPericias(List<int> listaIdPericias) async {
     pericias = [];
     for (final idPericia in listaIdPericias) {
       final pericia = Pericia(idPericia: idPericia);
-      pericia.loadPericia(id, idPericia);
+      await pericia.loadPericia(id, idPericia);
       pericias.add(pericia);
     }
   }
@@ -129,10 +129,10 @@ class Ficha {
     for (final map in maps) {
       periciaIDs.add(map['id_pericia']);
     }
-    loadPericias(periciaIDs);
-    /*for (Pericia pericia in pericias) {
-      calcularTotalPericia();
-    }*/
+    await loadPericias(periciaIDs);
+    for (var i = 0; i < pericias.length; i++) {
+      calcularTotalPericia(i);
+    }
     return periciaIDs;
   }
 
@@ -180,53 +180,115 @@ class Ficha {
     sumClassPv(classes);
   }
 
-  void calcularTotalPericia(int index) {
+  void atualizarTotalPericias() {
+    for (var i = 0; i < pericias.length; i++) {
+      calcularTotalPericia(i);
+    }
+  }
+
+  void atualizarPericiasDestreza(int index) {
     int valorTreinado = 0;
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    if (pericias[index].atributoModificador == 'FOR') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getForca) as int;
-    }
+    pericias[index].total = (pericias[index].modOutrosPericia +
+        pericias[index].modTempPericia +
+        _totalLevel +
+        valorTreinado +
+        habilidades.getModDestreza) as int;
+  }
 
-    if (pericias[index].atributoModificador == 'DEX') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getDestreza) as int;
+  void atualizarTodasDestreza() {
+    atualizarPericiasDestreza(0);
+    atualizarPericiasDestreza(4);
+    atualizarPericiasDestreza(9);
+    atualizarPericiasDestreza(11);
+    atualizarPericiasDestreza(15);
+  }
+
+  void atualizarPericiasCarisma(int index) {
+    int valorTreinado = 0;
+    if (pericias[index].treinado == true) {
+      valorTreinado = 3;
     }
-    if (pericias[index].atributoModificador == 'CON') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getConstituicao) as int;
+    pericias[index].total = (pericias[index].modOutrosPericia +
+        pericias[index].modTempPericia +
+        _totalLevel +
+        valorTreinado +
+        habilidades.getModCarisma) as int;
+  }
+
+  void atualizarTodasPericiasCarisma() {
+    atualizarPericiasCarisma(1);
+    atualizarPericiasCarisma(3);
+    atualizarPericiasCarisma(7);
+    atualizarPericiasCarisma(8);
+    atualizarPericiasCarisma(12);
+    atualizarPericiasCarisma(14);
+    atualizarPericiasCarisma(17);
+  }
+
+  void atualizarPericiasSabedoria(int index) {
+    int valorTreinado = 0;
+    if (pericias[index].treinado == true) {
+      valorTreinado = 3;
     }
-    if (pericias[index].atributoModificador == 'INT') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getInteligencia) as int;
+    pericias[index].total = (pericias[index].modOutrosPericia +
+        pericias[index].modTempPericia +
+        _totalLevel +
+        valorTreinado +
+        habilidades.getModSabedoria) as int;
+  }
+
+  void atualizarTodasPericiasSabedoria() {
+    atualizarPericiasSabedoria(6);
+    atualizarPericiasSabedoria(13);
+    atualizarPericiasSabedoria(16);
+    atualizarPericiasSabedoria(19);
+    atualizarPericiasSabedoria(20);
+  }
+
+  void atualizarPericiasInteligencia(int index) {
+    int valorTreinado = 0;
+    if (pericias[index].treinado == true) {
+      valorTreinado = 3;
     }
-    if (pericias[index].atributoModificador == 'SAB') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getSabedoria) as int;
+    pericias[index].total = (pericias[index].modOutrosPericia +
+        pericias[index].modTempPericia +
+        _totalLevel +
+        valorTreinado +
+        habilidades.getModInteligencia) as int;
+  }
+
+  void atualizarTodasPericiasInteligencia() {
+    atualizarPericiasInteligencia(5);
+    atualizarPericiasInteligencia(10);
+    atualizarPericiasInteligencia(18);
+  }
+
+  void atualizarPericiaForca(int index) {
+    int valorTreinado = 0;
+    if (pericias[index].treinado == true) {
+      valorTreinado = 3;
     }
+    pericias[index].total = (pericias[index].modOutrosPericia +
+        pericias[index].modTempPericia +
+        _totalLevel +
+        valorTreinado +
+        habilidades.getModForca) as int;
+  }
+
+  void calcularTotalPericia(int index) {
     if (pericias[index].atributoModificador == 'CAR') {
-      pericias[index].total = (pericias[index].modOutrosPericia +
-          pericias[index].modTempPericia +
-          _totalLevel +
-          valorTreinado +
-          habilidades.getCarisma) as int;
+      atualizarPericiasCarisma(index);
+    } else if (pericias[index].atributoModificador == 'DEX') {
+      atualizarPericiasDestreza(index);
+    } else if (pericias[index].atributoModificador == 'SAB') {
+      atualizarPericiasSabedoria(index);
+    } else if (pericias[index].atributoModificador == 'INT') {
+      atualizarPericiasInteligencia(index);
+    } else {
+      atualizarPericiaForca(index);
     }
   }
 
