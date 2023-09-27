@@ -254,10 +254,14 @@ class DB {
   String get _tabelaArmaduraEscudo => '''
       CREATE TABLE armaduras(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome_armadura TEXT,
-        bonus_ca INTEGER DEFAULT 0,
+        nome_armadura TEXT DEFAULT 'armadura',
+        bonus_ca_armadura INTEGER DEFAULT 0,
         maximo_destreza INTEGER,
-        tipo_armadura TEXT
+        tipo_armadura TEXT,
+        penalidade_armadura TEXT DEFAULT 0,
+        nome_escudo Text DEFAULT 'escudo',
+        bonus_ca_escudo INTEGER DEFAULT 0,
+        penalidade_escudo INTEGER DEFAULT 0
       )
 ''';
 
@@ -329,6 +333,33 @@ Future<void> updateFicha(
     where: 'id = ?',
     whereArgs: [id],
   );
+}
+
+Future createNewArmor(int id) async {
+  final database = await DB.instance.database;
+  int idArmadura = -1;
+  await database.transaction((txn) async {
+    idArmadura = await txn.insert(
+        'armaduras', {'nome_armadura': 'armadura', 'nome_escudo': 'escudo'});
+  });
+  await database.transaction((txn) async {
+    await txn
+        .insert('classe_armadura', {'id_armadura': idArmadura, 'id_ficha': id});
+  });
+}
+
+Future<int> buscarIdArmadura(int idFicha) async {
+  final database = await DB.instance.database;
+  final result = await database.query(
+    'armaduras_ficha',
+    where: 'id_ficha = ?',
+    whereArgs: [idFicha],
+  );
+  if (result.isNotEmpty) {
+    final id = result.first['id_armadura'] as int;
+    return id;
+  }
+  return -1;
 }
 
 Future createNewClass(int id) async {

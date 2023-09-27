@@ -1,4 +1,5 @@
 import 'package:app/database/db.dart';
+import 'package:app/database/models/Armadura.dart';
 import 'package:app/database/models/classe.dart';
 import 'package:app/database/models/habilidades.dart';
 import 'package:app/database/models/pericia.dart';
@@ -31,6 +32,7 @@ class Ficha {
   List<Pericia> pericias = [];
   List<Classe> classes = [];
   List<int> idClasses = [];
+  late ArmaduraEscudo armaduraEscudo;
 
   Ficha({
     required this.id,
@@ -39,11 +41,18 @@ class Ficha {
 
   Future<Ficha?> loadFicha(int id) async {
     await buscarClassesPorIdFicha(id);
+
     int idHabilidade = await buscarIdHabilidade(id);
     habilidades = Habilidades(idHabilidades: idHabilidade);
     habilidades.loadHabilidades(idHabilidade);
     sumAll(classes);
+
     await buscarPericiasPorIdFicha(id);
+
+    int idArmadura = await buscarIdArmadura(id);
+    armaduraEscudo = ArmaduraEscudo(id: idArmadura);
+    armaduraEscudo.loadArmadura(armaduraEscudo.id);
+
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(
       'fichas',
@@ -188,6 +197,11 @@ class Ficha {
 
   void atualizarPericiasDestreza(int index) {
     int valorTreinado = 0;
+    int penalidadeArmadura = 0;
+    if (pericias[index].penalidadeArmadura == 1) {
+      penalidadeArmadura =
+          armaduraEscudo.getPenalidade + armaduraEscudo.getPenalidadeEscudo;
+    }
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
@@ -195,7 +209,8 @@ class Ficha {
         pericias[index].modTempPericia +
         _totalLevel +
         valorTreinado +
-        habilidades.getModDestreza) as int;
+        habilidades.getModDestreza +
+        penalidadeArmadura) as int;
   }
 
   void atualizarTodasDestreza() {
@@ -268,6 +283,11 @@ class Ficha {
 
   void atualizarPericiaForca(int index) {
     int valorTreinado = 0;
+    int penalidadeArmadura = 0;
+    if (pericias[index].penalidadeArmadura == 1) {
+      penalidadeArmadura =
+          armaduraEscudo.getPenalidade + armaduraEscudo.getPenalidadeEscudo;
+    }
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
@@ -275,7 +295,8 @@ class Ficha {
         pericias[index].modTempPericia +
         _totalLevel +
         valorTreinado +
-        habilidades.getModForca) as int;
+        habilidades.getModForca +
+        penalidadeArmadura) as int;
   }
 
   void calcularTotalPericia(int index) {

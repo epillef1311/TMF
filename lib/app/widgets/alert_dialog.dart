@@ -49,6 +49,7 @@ class _AlertDialogFichaState extends State<AlertDialogFicha> {
                     createNewClass(id);
                     createNewHabilities(id);
                     createPericias(id);
+                    createNewArmor(id);
                     Navigator.of(context).pop();
                     nomeController.text = '';
                   },
