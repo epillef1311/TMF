@@ -47,11 +47,11 @@ class Ficha {
     habilidades.loadHabilidades(idHabilidade);
     sumAll(classes);
 
-    await buscarPericiasPorIdFicha(id);
-
     int idArmadura = await buscarIdArmadura(id);
     armaduraEscudo = ArmaduraEscudo(id: idArmadura);
     armaduraEscudo.loadArmadura(armaduraEscudo.id);
+
+    await buscarPericiasPorIdFicha(id);
 
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(

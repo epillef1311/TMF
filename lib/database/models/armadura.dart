@@ -6,10 +6,10 @@ class ArmaduraEscudo {
   late int _bonusCaArmadura;
   late int _maximoDestreza;
   String _tipo = 'nenhum';
-  late int _penalidadeArmadura;
-  late String _nomeEscudo;
-  late int _bonusCaEscudo;
-  late int _penalidadeEscudo;
+  int _penalidadeArmadura = 0;
+  String _nomeEscudo = '';
+  int _bonusCaEscudo = 0;
+  int _penalidadeEscudo = 0;
 
   ArmaduraEscudo({required this.id});
 
