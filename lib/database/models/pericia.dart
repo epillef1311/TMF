@@ -1,15 +1,18 @@
 import 'package:app/database/db.dart';
 
+import 'bonus_pericia.dart';
+
 class Pericia {
   final int idPericia;
+  late int idPericiaFicha;
   late bool treinado;
-  late int modTempPericia;
-  late int modOutrosPericia;
+  List<BonusPericia> modOutrosPericia = [];
   late String? opcoes;
   late String nomePericia;
   late int somenteTreinado;
   late int penalidadeArmadura;
-  late int total = 0;
+  int totalOutros = 0;
+  int total = 0;
   late String atributoModificador;
 
   Pericia({required this.idPericia});
@@ -18,7 +21,7 @@ class Pericia {
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.rawQuery('''
       SELECT pericias.nome_pericia, pericias.somente_treinado, pericias.penalidade_armadura, pericias.atributo_modificador,
-       pericias_ficha.treinado, pericias_ficha.mod_temp_pericia, pericias_ficha.mod_outros_pericia, pericias_ficha.opcoes_pericias
+       pericias_ficha.treinado, pericias_ficha.opcoes_pericias, pericias_ficha.id_pericia_ficha
       FROM pericias
       INNER JOIN pericias_ficha ON pericias.id = pericias_ficha.id_pericia
       WHERE pericias_ficha.id_ficha = ?
@@ -27,7 +30,6 @@ class Pericia {
 
     if (maps.isNotEmpty) {
       final row = maps[0];
-      modTempPericia = row['mod_temp_pericia'];
       modOutrosPericia = row['mod_outros_pericia'];
       opcoes = row['opcoes_pericias'];
       nomePericia = row['nome_pericia'];
@@ -42,7 +44,7 @@ class Pericia {
     }
   }
 
-  void setModTempPericia(String modTempPericia) {
+  /*void setModTempPericia(String modTempPericia) {
     if (modTempPericia == '') {
       this.modTempPericia = 0;
     } else {
@@ -56,7 +58,7 @@ class Pericia {
     } else {
       this.modOutrosPericia = int.parse(modOutrosPericia);
     }
-  }
+  }*/
 
   void setSomenteTreinado(String somenteTreinado) {
     if (somenteTreinado == '') {
@@ -64,5 +66,40 @@ class Pericia {
     } else {
       this.somenteTreinado = int.parse(somenteTreinado);
     }
+  }
+
+  Future<List<int>> buscarBonusPorIdPericia(int idPericiaFicha) async {
+    final database = await DB.instance.database;
+    final List<Map<String, dynamic>> maps = await database.query(
+      'pericias_outros',
+      columns: ['id_pericia_outro'],
+      where: 'id_pericia_ficha = ?',
+      whereArgs: [idPericiaFicha],
+    );
+
+    final List<int> periciaBonusIDs = [];
+    for (final map in maps) {
+      periciaBonusIDs.add(map['id_pericia_outro']);
+    }
+    await loadBonusOutro(periciaBonusIDs);
+    return periciaBonusIDs;
+  }
+
+  loadBonusOutro(List<int> listaIdBonus) async {
+    modOutrosPericia = [];
+    for (final idBonus in listaIdBonus) {
+      final bonus =
+          BonusPericia(idBonus: idBonus, idPericiaFicha: idPericiaFicha);
+      await bonus.loadBonusPericia(idPericiaFicha, idBonus);
+      modOutrosPericia.add(bonus);
+    }
+  }
+
+  void somarBonus() {
+    int temp = totalOutros;
+    for (BonusPericia bonus in modOutrosPericia) {
+      temp = temp + bonus.getBonus;
+    }
+    totalOutros = temp;
   }
 }

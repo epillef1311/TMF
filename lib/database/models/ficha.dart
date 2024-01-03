@@ -205,8 +205,7 @@ class Ficha {
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    pericias[index].total = (pericias[index].modOutrosPericia +
-        pericias[index].modTempPericia +
+    pericias[index].total = (pericias[index].totalOutros +
         _totalLevel +
         valorTreinado +
         habilidades.getModDestreza +
@@ -226,8 +225,7 @@ class Ficha {
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    pericias[index].total = (pericias[index].modOutrosPericia +
-        pericias[index].modTempPericia +
+    pericias[index].total = (pericias[index].totalOutros +
         _totalLevel +
         valorTreinado +
         habilidades.getModCarisma) as int;
@@ -248,8 +246,7 @@ class Ficha {
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    pericias[index].total = (pericias[index].modOutrosPericia +
-        pericias[index].modTempPericia +
+    pericias[index].total = (pericias[index].totalOutros +
         _totalLevel +
         valorTreinado +
         habilidades.getModSabedoria) as int;
@@ -268,8 +265,7 @@ class Ficha {
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    pericias[index].total = (pericias[index].modOutrosPericia +
-        pericias[index].modTempPericia +
+    pericias[index].total = (pericias[index].totalOutros +
         _totalLevel +
         valorTreinado +
         habilidades.getModInteligencia) as int;
@@ -291,8 +287,7 @@ class Ficha {
     if (pericias[index].treinado == true) {
       valorTreinado = 3;
     }
-    pericias[index].total = (pericias[index].modOutrosPericia +
-        pericias[index].modTempPericia +
+    pericias[index].total = (pericias[index].totalOutros +
         _totalLevel +
         valorTreinado +
         habilidades.getModForca +

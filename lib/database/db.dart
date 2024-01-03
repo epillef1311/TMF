@@ -39,6 +39,7 @@ class DB {
     await db.execute(_tabelaAtaqueFicha);
     await db.execute(_tabelaArmaduraEscudo);
     await db.execute(_tabelaArmadurasFicha);
+    await db.execute(_tabelaPericiasOutros);
     await db.rawInsert(''' 
     INSERT INTO pericias (nome_pericia, somente_treinado, penalidade_armadura,atributo_modificador)
       VALUES
@@ -156,16 +157,27 @@ class DB {
 
   String get _tabelaPericiasFicha => '''
       CREATE TABLE pericias_ficha (
+        id_pericia_ficha INTEGER PRIMARY KEY AUTOINCREMENT,
         id_ficha INTEGER,
         id_pericia INTEGER,
         treinado INTEGER DEFAULT 0,
-        mod_temp_pericia INTEGER DEFAULT 0,
-        mod_outros_pericia INTEGER DEFAULT 0,
         opcoes_pericias TEXT,
         FOREIGN KEY(id_ficha) REFERENCES fichas(id),
         FOREIGN KEY(id_pericia) REFERENCES pericias(id)
         )
     ''';
+
+  String get _tabelaPericiasOutros => '''
+      CREATE TABLE pericias_outros (
+        id_pericia_outro INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_pericia_ficha INTEGER,
+        bonus INTEGER DEFAULT 0,
+        origem TEXT,
+        FOREIGN KEY(id_pericia_ficha) REFERENCES pericias_ficha(id_pericia_ficha)
+
+      )
+
+''';
 
   String get _tabelaItens => '''
       CREATE TABLE itens (
@@ -256,8 +268,8 @@ class DB {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome_armadura TEXT DEFAULT 'armadura',
         bonus_ca_armadura INTEGER DEFAULT 0,
-        maximo_destreza INTEGER,
-        tipo_armadura TEXT,
+        maximo_destreza INTEGER DEFAULT 0,
+        tipo_armadura TEXT DEFAULT 'Nenhum',
         penalidade_armadura TEXT DEFAULT 0,
         nome_escudo Text DEFAULT 'escudo',
         bonus_ca_escudo INTEGER DEFAULT 0,
@@ -344,7 +356,7 @@ Future createNewArmor(int id) async {
   });
   await database.transaction((txn) async {
     await txn
-        .insert('classe_armadura', {'id_armadura': idArmadura, 'id_ficha': id});
+        .insert('armaduras_ficha', {'id_armadura': idArmadura, 'id_ficha': id});
   });
 }
 

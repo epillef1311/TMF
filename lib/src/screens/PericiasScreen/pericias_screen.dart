@@ -116,30 +116,16 @@ class _FichaPericiasState extends State<FichaPericias> {
                               enabled: false,
                             ),
                             SquareBoxPericia(
-                              nomeColuna: 'mod_temp_pericia',
-                              idFicha: ficha.id,
-                              idPericia: ficha.pericias[index].idPericia,
-                              initialValue:
-                                  ficha.pericias[index].modTempPericia,
-                              tableName: 'pericias_ficha',
-                              onChanged: (value) {
-                                ficha.pericias[index].setModTempPericia(value);
-                                ficha.calcularTotalPericia(index);
-                                setState(() {});
-                              },
-                            ),
-                            SquareBoxPericia(
                               nomeColuna: 'mod_outros_pericia',
                               idFicha: ficha.id,
                               idPericia: ficha.pericias[index].idPericia,
-                              initialValue:
-                                  ficha.pericias[index].modOutrosPericia,
+                              initialValue: ficha.pericias[index].totalOutros,
                               tableName: 'pericias_ficha',
                               onChanged: (value) {
-                                ficha.pericias[index]
+                                /*ficha.pericias[index]
                                     .setModOutrosPericia(value);
                                 ficha.calcularTotalPericia(index);
-                                setState(() {});
+                                setState(() {});*/
                               },
                             )
                           ],

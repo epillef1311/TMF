@@ -4,7 +4,7 @@ class ArmaduraEscudo {
   int id;
   late String _nomeArmadura;
   late int _bonusCaArmadura;
-  late int _maximoDestreza;
+  late int? _maximoDestreza;
   String _tipo = 'nenhum';
   int _penalidadeArmadura = 0;
   String _nomeEscudo = '';
