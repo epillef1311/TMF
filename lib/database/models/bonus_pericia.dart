@@ -14,7 +14,7 @@ class BonusPericia {
     SELECT pericias_outros.bonus, pericias_outros.origem
     FROM pericias_outros
     WHERE pericias_outros.id_pericia_ficha = ?
-    AND pericias_outros.id_pericia_outro = ?;
+    AND pericias_outros.id = ?;
 
 ''', [idPericiaFicha, idBonusOutro]);
 
@@ -27,9 +27,9 @@ class BonusPericia {
 
   int get getBonus => _bonus;
 
-  set setBonus(bonus) => this._bonus = bonus;
+  setBonus(int bonus) => _bonus = bonus;
 
   String get getOrigem => _origem;
 
-  set setOrigem(origem) => this._origem = origem;
+  setOrigem(String origem) => _origem = origem;
 }

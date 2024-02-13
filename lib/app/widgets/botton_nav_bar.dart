@@ -33,7 +33,7 @@ class _BottonNavBarState extends State<BottonNavBar> {
   @override
   Widget build(BuildContext context) {
     final ficha = ModalRoute.of(context)!.settings.arguments as Ficha;
-    ficha.loadFicha(ficha.id);
+    //ficha.loadFicha(ficha.id);
     return Scaffold(
       body: PageView(
         controller: pc,
@@ -47,7 +47,9 @@ class _BottonNavBarState extends State<BottonNavBar> {
           ),
           FichaHabilidadesTalentos(),
           FichaCombate(),
-          FichaMagias(),
+          FichaMagias(
+            ficha: ficha,
+          ),
           FichaInventario()
         ],
       ),

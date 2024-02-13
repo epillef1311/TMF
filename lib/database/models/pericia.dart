@@ -30,18 +30,19 @@ class Pericia {
 
     if (maps.isNotEmpty) {
       final row = maps[0];
-      modOutrosPericia = row['mod_outros_pericia'];
       opcoes = row['opcoes_pericias'];
       nomePericia = row['nome_pericia'];
       somenteTreinado = row['somente_treinado'];
       penalidadeArmadura = row['penalidade_armadura'];
       atributoModificador = row['atributo_modificador'];
+      idPericiaFicha = row['id_pericia_ficha'];
       if (row['treinado'] == 1) {
         treinado = true;
       } else {
         treinado = false;
       }
     }
+    buscarBonusPorIdPericia(idPericiaFicha);
   }
 
   /*void setModTempPericia(String modTempPericia) {
@@ -72,14 +73,14 @@ class Pericia {
     final database = await DB.instance.database;
     final List<Map<String, dynamic>> maps = await database.query(
       'pericias_outros',
-      columns: ['id_pericia_outro'],
+      columns: ['id'],
       where: 'id_pericia_ficha = ?',
       whereArgs: [idPericiaFicha],
     );
 
     final List<int> periciaBonusIDs = [];
     for (final map in maps) {
-      periciaBonusIDs.add(map['id_pericia_outro']);
+      periciaBonusIDs.add(map['id']);
     }
     await loadBonusOutro(periciaBonusIDs);
     return periciaBonusIDs;
@@ -93,13 +94,42 @@ class Pericia {
       await bonus.loadBonusPericia(idPericiaFicha, idBonus);
       modOutrosPericia.add(bonus);
     }
+    somarBonus();
   }
 
   void somarBonus() {
+    totalOutros = 0;
     int temp = totalOutros;
     for (BonusPericia bonus in modOutrosPericia) {
       temp = temp + bonus.getBonus;
     }
     totalOutros = temp;
   }
+
+  /*Future BuscarBonusPorPericiaFichaId(int periciaFichaId) async {
+    final database = await DB.instance.database;
+    final List<Map<String, dynamic>> maps = await database.query(
+      'pericias_outros',
+      columns: ['id_pericia_outro'],
+      where: 'id_pericia_ficha = ?',
+      whereArgs: [periciaFichaId],
+    );
+
+    final List<int> periciaIDs = [];
+    for (final map in maps) {
+      periciaIDs.add(map['id_pericia_outro']);
+    }
+    await loadBonusPericias(periciaIDs);
+    somarBonus();
+    return periciaIDs;
+  }
+
+  loadBonusPericias(List<int> listaIdPericias) async {
+    pericias = [];
+    for (final idPericia in listaIdPericias) {
+      final pericia = Pericia(idPericia: idPericia);
+      await pericia.loadPericia(id, idPericia);
+      pericias.add(pericia);
+    }
+  }*/
 }

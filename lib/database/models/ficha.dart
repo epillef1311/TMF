@@ -2,6 +2,7 @@ import 'package:app/database/db.dart';
 import 'package:app/database/models/Armadura.dart';
 import 'package:app/database/models/classe.dart';
 import 'package:app/database/models/habilidades.dart';
+import 'package:app/database/models/magia.dart';
 import 'package:app/database/models/pericia.dart';
 
 class Ficha {
@@ -32,6 +33,8 @@ class Ficha {
   List<Pericia> pericias = [];
   List<Classe> classes = [];
   List<int> idClasses = [];
+  List<Magia> magias = [];
+  List<int> idMagias = [];
   late ArmaduraEscudo armaduraEscudo;
 
   Ficha({
@@ -41,7 +44,7 @@ class Ficha {
 
   Future<Ficha?> loadFicha(int id) async {
     await buscarClassesPorIdFicha(id);
-
+    await buscarIdMagia(id);
     int idHabilidade = await buscarIdHabilidade(id);
     habilidades = Habilidades(idHabilidades: idHabilidade);
     habilidades.loadHabilidades(idHabilidade);
@@ -210,6 +213,37 @@ class Ficha {
         valorTreinado +
         habilidades.getModDestreza +
         penalidadeArmadura) as int;
+  }
+
+  Future<List<int>> buscarIdMagia(int idFicha) async {
+    final database = await DB.instance.database;
+    final List<Map<String, dynamic>> maps = await database.query(
+      'magia_ficha',
+      columns: ['id_magia'],
+      where: 'id_ficha = ?',
+      whereArgs: [idFicha],
+    );
+
+    final List<int> magiaIDs = [];
+    if (maps.isEmpty) {
+      return magiaIDs;
+    }
+    for (final map in maps) {
+      magiaIDs.add(map['id_magia']);
+    }
+    await loadMagias(magiaIDs);
+    return magiaIDs;
+  }
+
+  loadMagias(List<int> listaIdMagia) async {
+    magias = [];
+    for (final int idMagia in listaIdMagia) {
+      print(listaIdMagia);
+      final magia = Magia(id: idMagia);
+      await magia.loadMagia(id, idMagia);
+      magias.add(magia);
+      print(magias);
+    }
   }
 
   void atualizarTodasDestreza() {

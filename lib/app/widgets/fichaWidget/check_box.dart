@@ -34,25 +34,14 @@ class _CheckBoxPericiaState extends State<CheckBoxPericia> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(width: 2, color: SetColors.primaryRedColor),
-        color: SetColors.backGroundColor,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 1,
-            offset: Offset(0, 1),
-          )
-        ],
-      ),
-      child: Checkbox(
-        value: widget.treinado,
-        onChanged: widget.onChanged,
-      ),
-    );
+    return Transform.scale(
+        scale: 1.8,
+        child: Checkbox(
+            value: widget.treinado,
+            onChanged: widget.onChanged,
+            side: const BorderSide(color: SetColors.primaryRedColor),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(2),
+            )));
   }
 }

@@ -3,6 +3,7 @@ import 'package:app/app/widgets/fichaWidget/check_box.dart';
 import 'package:app/database/db.dart';
 import 'package:app/database/models/ficha.dart';
 import 'package:app/app/themes/colors.dart';
+import 'package:app/src/screens/PericiasScreen/pericias_outros_screen.dart';
 import 'package:flutter/material.dart';
 
 class FichaPericias extends StatefulWidget {
@@ -50,9 +51,6 @@ class _FichaPericiasState extends State<FichaPericias> {
                     Text('Total',
                         style: TextStyle(
                             fontSize: 24, color: SetColors.primaryRedColor)),
-                    Text('Temp',
-                        style: TextStyle(
-                            fontSize: 24, color: SetColors.primaryRedColor)),
                     Text('Outro',
                         style: TextStyle(
                             fontSize: 24, color: SetColors.primaryRedColor))
@@ -79,7 +77,7 @@ class _FichaPericiasState extends State<FichaPericias> {
                                   setState(() {
                                     ficha.pericias[index].treinado = newBool!;
                                     if (newBool == true) {
-                                      final a = 1;
+                                      const a = 1;
                                       updatePericias(
                                           'treinado',
                                           'pericias_ficha',
@@ -87,7 +85,7 @@ class _FichaPericiasState extends State<FichaPericias> {
                                           ficha.id,
                                           ficha.pericias[index].idPericia);
                                     } else {
-                                      final a = 0;
+                                      const a = 0;
                                       updatePericias(
                                           'treinado',
                                           'pericias_ficha',
@@ -107,6 +105,7 @@ class _FichaPericiasState extends State<FichaPericias> {
                               tableName: '',
                               hintText: '',
                               enabled: false,
+                              enableBorder: false,
                             ),
                             SquareBox(
                               nomeColuna: '',
@@ -114,19 +113,36 @@ class _FichaPericiasState extends State<FichaPericias> {
                               initialValue: ficha.pericias[index].total,
                               tableName: '',
                               enabled: false,
+                              enableBorder: false,
                             ),
-                            SquareBoxPericia(
-                              nomeColuna: 'mod_outros_pericia',
-                              idFicha: ficha.id,
-                              idPericia: ficha.pericias[index].idPericia,
-                              initialValue: ficha.pericias[index].totalOutros,
-                              tableName: 'pericias_ficha',
-                              onChanged: (value) {
-                                /*ficha.pericias[index]
-                                    .setModOutrosPericia(value);
-                                ficha.calcularTotalPericia(index);
-                                setState(() {});*/
+                            GestureDetector(
+                              behavior: HitTestBehavior.translucent,
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            PericiaOutrosScreen(
+                                              pericia: ficha.pericias[index],
+                                              idFicha: ficha.id,
+                                              indexPericia: index,
+                                              ficha: ficha,
+                                            )))
+                                    .then((_) {
+                                  setState(() {
+                                    ficha.pericias[index].loadPericia(ficha.id,
+                                        ficha.pericias[index].idPericia);
+                                    ficha.calcularTotalPericia(index);
+                                  });
+                                });
                               },
+                              child: SquareBoxPericia(
+                                nomeColuna: 'mod_outros_pericia',
+                                idFicha: ficha.id,
+                                idPericia: ficha.pericias[index].idPericia,
+                                initialValue: ficha.pericias[index].totalOutros,
+                                tableName: 'pericias_ficha',
+                                enabled: false,
+                              ),
                             )
                           ],
                         ),

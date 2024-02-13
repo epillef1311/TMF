@@ -169,7 +169,7 @@ class DB {
 
   String get _tabelaPericiasOutros => '''
       CREATE TABLE pericias_outros (
-        id_pericia_outro INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         id_pericia_ficha INTEGER,
         bonus INTEGER DEFAULT 0,
         origem TEXT,
@@ -201,6 +201,7 @@ class DB {
   String get _tabelaMagias => '''
     CREATE TABLE magias(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nivel_magia TEXT,
       nome_magia TEXT,
       alvo_area TEXT,
       tempo_execucao TEXT,
@@ -214,7 +215,7 @@ class DB {
 ''';
 
   String get _tabelaMagiaFicha => '''
-    CREATE TABLE magia_fica(
+    CREATE TABLE magia_ficha(
         id_ficha INTEGER,
         id_magia INTEGER,
         FOREIGN KEY(id_ficha) REFERENCES fichas(id),
@@ -270,7 +271,7 @@ class DB {
         bonus_ca_armadura INTEGER DEFAULT 0,
         maximo_destreza INTEGER DEFAULT 0,
         tipo_armadura TEXT DEFAULT 'Nenhum',
-        penalidade_armadura TEXT DEFAULT 0,
+        penalidade_armadura INTEGER DEFAULT 0,
         nome_escudo Text DEFAULT 'escudo',
         bonus_ca_escudo INTEGER DEFAULT 0,
         penalidade_escudo INTEGER DEFAULT 0
@@ -347,6 +348,25 @@ Future<void> updateFicha(
   );
 }
 
+Future<void> updateBonusPericia(
+    String tabela, String column, dynamic value, int id) async {
+  final database = await DB.instance.database;
+
+  await database.update(
+    tabela,
+    {column: value},
+    where: 'id = ?',
+    whereArgs: [id],
+  );
+}
+
+Future<void> deleteBonusPericia(int bonusId) async {
+  final database = await DB.instance.database;
+  await database.transaction((txn) async {
+    await txn.delete('pericias_outros', where: 'id = ?', whereArgs: [bonusId]);
+  });
+}
+
 Future createNewArmor(int id) async {
   final database = await DB.instance.database;
   int idArmadura = -1;
@@ -384,6 +404,30 @@ Future createNewClass(int id) async {
     await txn.insert('classe_ficha', {'id_classe': idClasse, 'id_ficha': id});
   });
   return idClasse;
+}
+
+Future<int> createNewMagia(int id, String nivel) async {
+  final database = await DB.instance.database;
+  int idMagia = -1;
+  await database.transaction((txn) async {
+    idMagia = await txn
+        .insert('magias', {'nome_magia': 'Nova Magia', 'nivel_magia': nivel});
+  });
+  await database.transaction((txn) async {
+    await txn.insert('magia_ficha', {'id_magia': idMagia, 'id_ficha': id});
+  });
+  return idMagia;
+}
+
+Future<void> deleteMagia(int magiaId, int fichaId) async {
+  final database = await DB.instance.database;
+  await database.transaction((txn) async {
+    await txn.delete('magias', where: 'id = ?', whereArgs: [magiaId]);
+  });
+  await database.transaction((txn) async {
+    await txn.delete('magia_ficha',
+        where: 'id_magia = ? AND id_ficha = ?', whereArgs: [magiaId, fichaId]);
+  });
 }
 
 Future<void> deleteClass(int classId, int fichaId) async {
@@ -475,7 +519,7 @@ Future<void> updatePericias(String coluna, String tabela, dynamic value,
     int idFicha, int idPericia) async {
   final database = await DB.instance.database;
 
-  await database.update('pericias_ficha', {coluna: value},
+  await database.update(tabela, {coluna: value},
       where: 'id_ficha = ? AND id_pericia = ?',
       whereArgs: [idFicha, idPericia]);
 }

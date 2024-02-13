@@ -1,4 +1,5 @@
 import 'package:app/app/widgets/botton_nav_bar.dart';
+import 'package:app/src/screens/PericiasScreen/pericias_outros_screen.dart';
 import 'package:app/src/screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,8 @@ class TormentaFichaApp extends StatelessWidget {
           '/': (context) => const LoginScreen(),
           '/home': (context) => const HomeScreen(),
           'listaFichas': (context) => const ListaFichas(),
-          'bottonNavBar': (context) => const BottonNavBar()
+          'bottonNavBar': (context) => const BottonNavBar(),
+          //'PericiasOutros': (context) => PericiaOutrosScreen()
         },
       ),
     );
